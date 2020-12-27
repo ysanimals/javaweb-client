@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {  // 使用"/queue-admin"来代替 API头部，可随意命名
-        target: 'http://localhost:9123', // 服务器地址
+        target: 'http://localhost:8888', // 服务器地址
         changeOrigin: true // 是否跨域
       }
     },
