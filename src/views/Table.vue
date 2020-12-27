@@ -129,7 +129,7 @@
         postData.append('currentPage', this.currentPage);
         postData.append('pageSize', this.pageSize);
         const _this = this;
-        request.post('/api/sort/query', postData).then(function (response) {
+        request.post({url: '/api/sort/query', data: postData}).then(response => {
           console.log(response)
           _this.listLoading = false;
           _this.listTable = response.data.listTable;
@@ -173,7 +173,7 @@
         const _this = this;
         let postData = new FormData();
         postData.append('sortId', row.sortId);
-        request.post('/api/sort/remove', postData).then(response => {
+        request.post({url:'/api/sort/remove', data:postData}).then(response => {
           console.log(response)
           // if (response.data.intResult) {
           //   _this.getTableData();
@@ -191,7 +191,7 @@
             postData.append('sortId', _this.dlgForm.sortId);
             postData.append('sortName', _this.dlgForm.sortName);
             postData.append('sortInfo', _this.dlgForm.sortInfo);
-            request.post('/api/sort/' + _this.opFlag, postData).then(function (response) {
+            request.post({url:'/api/sort/' + _this.opFlag,data: postData}).then(response => {
               _this.dlgFormVisible = false;
               if (response.data.intResult) {
                 _this.getTableData();
@@ -229,7 +229,7 @@
         let postData = new FormData();
         alert(this.dlgUpload.imgData);
         postData.append('imgBase64', this.dlgUpload.imgData);
-        request.post('/api/upload/image', postData).then(function (response) {
+        request.post({url:'/api/upload/image',data:postData}).then(response => {
           _this.dlgFormVisible = false;
           if (response.data.intResult) {
             alert(response.data.objResult);
