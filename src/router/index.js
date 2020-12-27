@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '../views/Login'
 import Register from '../views/Register'
 import Exam from '../views/Exam'
+import Table from '../views/Table'
 import UserInfo from '../views/UserInfo'
 import SortTrash from '../views/SortTrash'
 import GarbageManage from '../views/GarbageManage'
@@ -53,6 +54,15 @@ export default new Router({
           component: Exam,
           meta: {
             title: '垃圾分类试卷',
+            keepAlive: true
+          }
+        },
+        {
+          path: 'table',
+          name: 'Table',
+          component: Table,
+          meta: {
+            title: '题库表',
             keepAlive: true
           }
         },
