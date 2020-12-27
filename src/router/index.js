@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../views/Login'
 import Register from '../views/Register'
+import Exam from '../views/Exam'
 import UserInfo from '../views/UserInfo'
 import SortTrash from '../views/SortTrash'
 import GarbageManage from '../views/GarbageManage'
@@ -44,6 +45,15 @@ export default new Router({
           meta: {
             title: '注册',
             keepAlive: false
+          }
+        },
+        {
+          path: 'exam',
+          name: 'Exam',
+          component: Exam,
+          meta: {
+            title: '垃圾分类试卷',
+            keepAlive: true
           }
         },
         {
