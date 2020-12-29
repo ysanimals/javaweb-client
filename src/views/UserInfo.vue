@@ -6,10 +6,10 @@
           <el-input style="margin-left: 16px" v-model="userInfo.userName" disabled></el-input>
         </el-form-item>
         <el-form-item label="手机号码" style="display: flex; flex-direction: row">
-          <el-input style="margin-left: 16px" v-model="userInfo.phone" disabled></el-input>
+          <el-input style="margin-left: 16px" v-model="userInfo.userPhone" disabled></el-input>
         </el-form-item>
         <el-form-item label="身份证号" style="display: flex; flex-direction: row">
-          <el-input style="margin-left: 16px" v-model="userInfo.idNumber" disabled></el-input>
+          <el-input style="margin-left: 16px" v-model="userInfo.UserCard" disabled></el-input>
         </el-form-item>
         <el-form-item label="答题总数" style="display: flex; flex-direction: row">
           <el-input style="margin-left: 16px" v-model="userInfo.total" disabled></el-input>

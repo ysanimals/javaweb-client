@@ -20,8 +20,8 @@
                   <span class="registerMessage">手机号码：</span>
                 </div>
                 <div class="input">
-                  <label for="phone"></label>
-                  <input class="registerText" id="phone" v-model="form.phone" type="text">
+                  <label for="userPhone"></label>
+                  <input class="registerText" id="userPhone" v-model="form.userPhone" type="text">
                 </div>
                 <div class="message">
                   <span class="registerMessage">11位有效号码，用于登录账号</span>
@@ -32,8 +32,8 @@
                   <span class="registerMessage">用户密码：</span>
                 </div>
                 <div class="input">
-                  <label for="password"></label>
-                  <input class="registerText" id="password" v-model="form.password" type="password">
+                  <label for="userPwd"></label>
+                  <input class="registerText" id="userPwd" v-model="form.userPwd" type="password">
                 </div>
                 <div class="message">
                   <span class="registerMessage">不少于8位，由字母和数字组成</span>
@@ -68,8 +68,8 @@
                   <span class="registerMessage">身份证号：</span>
                 </div>
                 <div class="input">
-                  <label for="idNumber"></label>
-                  <input class="registerText" id="idNumber" v-model="form.idNumber" type="text">
+                  <label for="userCard"></label>
+                  <input class="registerText" id="userCard" v-model="form.userCard" type="text">
                 </div>
                 <div class="message">
                   <span class="registerMessage">有效的身份证号码</span>
@@ -120,23 +120,23 @@ export default {
   methods: {
 
     check () {
-      const phone = this.form.phone
-      const password = this.form.password
+      const userPhone = this.form.userPhone
+      const userPwd = this.form.userPwd
       const checkPwd = this.form.checkPwd
       const userName = this.form.userName
-      const idNumber = this.form.idNumber
-      let flag = phone && password && checkPwd && userName && idNumber &&
-        phone.length > 0 && password.length > 0 && checkPwd.length > 0 && userName.length > 0 &&
-        idNumber.length > 0
+      const userCard = this.form.userCard
+      let flag = userPhone&& userPwd && checkPwd && userName && userCard &&
+        userPhone.length > 0 && userPwd.length > 0 && checkPwd.length > 0 && userName.length > 0 &&
+        userCard.length > 0
       if (!flag) {
         alert('信息填写不完整！')
         return false
       }
-      if (!this.phoneRe.test(phone)) {
+      if (!this.phoneRe.test(userPhone)) {
         alert('手机号格式不正确！')
         return false
       }
-      if (password === checkPwd) {
+      if (userPwd === checkPwd) {
         if (!this.pwdRe.test(checkPwd)) {
           alert('登录密码格式不正确！')
           return false
@@ -145,7 +145,7 @@ export default {
         alert('确认密码必须和输入的密码相同！')
         return false
       }
-      if (!this.cardRe.test(idNumber)) {
+      if (!this.cardRe.test(userCard)) {
         alert('身份证号格式不正确！')
         return false
       }
@@ -158,9 +158,9 @@ export default {
       }
       let form = {
         userName: this.form.userName,
-        password: md5(this.form.password),
-        phone: this.form.phone,
-        idNumber: this.form.idNumber
+        password: md5(this.form.userPwd),
+        phone: this.form.userPhone,
+        idNumber: this.form.userCard
       }
       const that = this
       this.clickType = false

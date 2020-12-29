@@ -6,21 +6,35 @@
     <el-form
       status-icon
       ref="form"
-      :model="garbage"
+      :model="user"
       :rules="rules"
       label-width="100px"
       class="demo-ruleForm">
       <el-row>
         <el-col :span="24">
-          <el-form-item label="垃圾名称" prop="garbageName">
-            <el-input type="text" v-model="garbage.garbageName"></el-input>
+          <el-form-item label="用户名" prop="userName">
+            <el-input type="text" v-model="user.userName" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="垃圾类别" prop="sortId">
-            <el-select v-model="garbage.sortId" placeholder="请选择">
+          <el-form-item label="手机号" prop="uerPhone">
+            <el-input type="text" v-model="user.userPhone" disabled></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="身份证号" prop="userCard">
+            <el-input type="text" v-model="user.userCard" disabled></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="审核状态" prop="userType">
+            <el-select v-model="user.userType" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -43,46 +57,52 @@
   import request from '../../utils/request'
 
   export default {
-    name: 'AddGarbage',
+    name: 'EditUser',
     props: {
-      options: {
-        type: Array,
-        default: () => { return [] }
-      }
     },
     data () {
       return {
         visible: false,
-        garbage: {},
+        options: [
+          {
+            value: 1,
+            label: '通过'
+          },
+          {
+            value: 2,
+            label: '不通过'
+          }
+        ],
+        user: {},
         rules: {
-          garbageName: [
-            { required: true, message: '请输入垃圾名称', trigger: 'blur' }
-          ],
-          sortId: [
-            { required: true, message: '请输入垃圾类别', trigger: 'blur' }
+          userType: [
+            { required: true, message: '请输入审核状态', trigger: 'blur' }
           ]
         }
       }
     },
     methods: {
-      show () {
+      show (record) {
+        let obj = JSON.stringify(record)
+        this.user = JSON.parse(obj)
+        this.user.userType = null
         this.visible = true
       },
       handleSubmit () {
         const that = this
         this.$refs['form'].validate((valid) => {
           if (valid) {
-            request.postNoJSON({url: '/api/garbage/add', data: that.garbage}).then(res => {
+            request.postNoJSON({url: '/api/user/update', data: that.user}).then(res => {
               if (res.result === 'error') {
                 this.$message({
                   type: 'error',
                   showClose: true,
-                  message: res.result || '添加失败'})
+                  message: res.result || '修改失败'})
               } else {
                 this.$message({
                   type: 'success',
                   showClose: true,
-                  message: '添加成功'})
+                  message: '修改成功'})
                 that.visible = false
                 that.$emit('ok')
               }
@@ -90,7 +110,7 @@
               this.$message({
                 type: 'error',
                 showClose: true,
-                message: '添加失败'})
+                message: '修改失败'})
               console.log(err)
             })
           } else {

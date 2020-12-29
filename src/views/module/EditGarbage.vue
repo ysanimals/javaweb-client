@@ -12,20 +12,6 @@
       class="demo-ruleForm">
       <el-row>
         <el-col :span="24">
-          <el-form-item label="垃圾种类" prop="garbageFlag">
-            <el-input type="text" v-model="garbage.garbageFlag"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="处理方式" prop="garbageInfo">
-            <el-input type="text" v-model="garbage.garbageInfo"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
           <el-form-item label="垃圾名称" prop="garbageName">
             <el-input type="text" v-model="garbage.garbageName"></el-input>
           </el-form-item>
@@ -33,8 +19,8 @@
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="垃圾类别" prop="garbageType">
-            <el-select v-model="garbage.garbageType" placeholder="请选择">
+          <el-form-item label="垃圾类别" prop="sortId">
+            <el-select v-model="garbage.sortId" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -54,64 +40,68 @@
 </template>
 
 <script>
-import request from '../../utils/request'
+  import request from '../../utils/request'
 
-export default {
-  name: 'EditGarbage',
-  props: {
-    options: {
-      type: Array,
-      default: () => { return [] }
-    }
-  },
-  data () {
-    return {
-      visible: false,
-      garbage: {},
-      rules: {
-        garbageFlag: [
-          { required: true, message: '请输入垃圾种类', trigger: 'blur' }
-        ],
-        garbageInfo: [
-          { required: true, message: '请输入处理方式', trigger: 'blur' }
-        ],
-        garbageName: [
-          { required: true, message: '请输入垃圾名称', trigger: 'blur' }
-        ],
-        garbageType: [
-          { required: true, message: '请输入垃圾类别', trigger: 'blur' }
-        ]
+  export default {
+    name: 'EditGarbage',
+    props: {
+      options: {
+        type: Array,
+        default: () => { return [] }
+      }
+    },
+    data () {
+      return {
+        visible: false,
+        garbage: {},
+        rules: {
+          garbageName: [
+            { required: true, message: '请输入垃圾名称', trigger: 'blur' }
+          ],
+          sortId: [
+            { required: true, message: '请输入垃圾类别', trigger: 'blur' }
+          ]
+        }
+      }
+    },
+    methods: {
+      show (record) {
+        let obj = JSON.stringify(record)
+        this.garbage = JSON.parse(obj)
+        this.visible = true
+      },
+      handleSubmit () {
+        const that = this
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            request.postNoJSON({url: '/api/garbage/update', data: that.garbage}).then(res => {
+              if (res.result === 'error') {
+                this.$message({
+                  type: 'error',
+                  showClose: true,
+                  message: res.result || '修改失败'})
+              } else {
+                this.$message({
+                  type: 'success',
+                  showClose: true,
+                  message: '修改成功'})
+                that.visible = false
+                that.$emit('ok')
+              }
+            }).catch(err => {
+              this.$message({
+                type: 'error',
+                showClose: true,
+                message: '修改失败'})
+              console.log(err)
+            })
+          } else {
+            return false
+          }
+        })
       }
     }
-  },
-  methods: {
-    show (record) {
-      this.garbage = record
-      this.visible = true
-    },
-    handleSubmit () {
-      const that = this
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          request.postNoJSON({url: '/api/garbage/update', data: that.garbage}).then(res => {
-            if (res.result === 'error') {
-              that.$message.error(res.result)
-            } else {
-              that.$message.success('修改成功')
-              that.visible = false
-              that.$emit('ok')
-            }
-          }).catch(err => {
-            that.$message.error('修改失败')
-            console.log(err)
-          })
-        } else {
-          return false
-        }
-      })
-    }
   }
-}
 </script>
 
 <style scoped>
