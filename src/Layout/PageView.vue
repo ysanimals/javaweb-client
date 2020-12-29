@@ -6,7 +6,7 @@
 
 <script>
 
-export default {
-  name: 'PageView'
-}
+  export default {
+    name: 'PageView'
+  }
 </script>

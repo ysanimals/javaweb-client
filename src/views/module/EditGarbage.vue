@@ -12,6 +12,13 @@
       class="demo-ruleForm">
       <el-row>
         <el-col :span="24">
+          <el-form-item label="垃圾种类" prop="garbageFlag">
+            <el-input type="text" v-model="garbage.garbageFlag"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
           <el-form-item label="垃圾名称" prop="garbageName">
             <el-input type="text" v-model="garbage.garbageName"></el-input>
           </el-form-item>
@@ -55,6 +62,9 @@
         visible: false,
         garbage: {},
         rules: {
+          garbageFlag: [
+            { required: false, message: '请输入垃圾种类', trigger: 'blur' }
+          ],
           garbageName: [
             { required: true, message: '请输入垃圾名称', trigger: 'blur' }
           ],

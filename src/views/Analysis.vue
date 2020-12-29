@@ -1,38 +1,49 @@
 <template>
-  <div>
+  <div class="body">
+    <div class="center">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'Analysis',
-  data () {
-    return {
-    }
-  },
-  methods: {
-    goto (val) {
-      this.$router.push({name: val})
+
+  export default {
+    name: 'Analysis',
+    components: {},
+    data () {
+      return {
+        activeName: '',
+        menus: [],
+        nameMap: {
+          1: 'garbageAnalysis',
+          2: 'userAnalysis',
+          3: 'examLog'
+        }
+      }
     },
-    goBack () {
-      this.$router.back()
+    created () {
+    },
+    filters: {
+    },
+    methods: {
     }
   }
-}
 </script>
 
 <style scoped>
 
-.body {
-  width: 100%;
-  height: 100%;
-}
+  .body {
+    width: 100%;
+    height: 100%;
+  }
 
-.center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
+  .center {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 </style>

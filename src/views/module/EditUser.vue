@@ -19,15 +19,15 @@
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="手机号" prop="uerPhone">
-            <el-input type="text" v-model="user.userPhone" disabled></el-input>
+          <el-form-item label="手机号" prop="phone">
+            <el-input type="text" v-model="user.phone" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="身份证号" prop="userCard">
-            <el-input type="text" v-model="user.userCard" disabled></el-input>
+          <el-form-item label="身份证号" prop="idNumber">
+            <el-input type="text" v-model="user.phone" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>

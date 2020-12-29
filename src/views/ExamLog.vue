@@ -4,22 +4,10 @@
       <el-form status-icon ref="form" label-width="100px" class="demo-ruleForm">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="垃圾类别">
-              <el-select v-model="queryParam.sortId" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="垃圾种类">
+            <el-form-item label="用户姓名">
               <el-input
                 type="text"
-                v-model="queryParam.garbageFlag"
+                v-model="queryParam.userName"
                 @keyup.enter.native="fetchData"></el-input>
             </el-form-item>
           </el-col>
@@ -31,21 +19,24 @@
                 @keyup.enter.native="fetchData"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="8">
-            <el-form-item>
-              <el-button type="primary" @click="fetchData">查询</el-button>
-              <el-button @click="queryParam={}">重置</el-button>
+            <el-form-item label="问卷编号">
+              <el-input
+                type="text"
+                v-model="queryParam.examSn"
+                @keyup.enter.native="fetchData"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-form-item>
+          <el-row>
             <el-col :span="8">
-              <el-button type="primary" @click="addGarbage">新增</el-button>
+              <el-form-item>
+                <el-button type="primary" @click="fetchData">查询</el-button>
+                <el-button @click="queryParam={}">重置</el-button>
+              </el-form-item>
             </el-col>
-          </el-form-item>
+          </el-row>
         </el-row>
       </el-form>
       <div>
@@ -57,18 +48,33 @@
           style="width: 100%"
           @selection-change="handleSelectionChange">
           <el-table-column
-            prop="garbageId"
-            label="序号"
-            width="55">
+            prop="examSn"
+            label="问卷编号"
+            width="80">
+          </el-table-column>
+          <el-table-column
+            prop="userName"
+            label="用户名称"
+            width="120">
           </el-table-column>
           <el-table-column
             prop="garbageName"
             label="垃圾名称"
-            width="150">
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="answerId"
+            label="用户答案"
+            width="120">
+            <template slot-scope="scope">
+              <el-tag
+                :type="styleMap[scope.row.answerId].style"
+                disable-transitions>{{ styleMap[scope.row.answerId].name }}</el-tag>
+            </template>
           </el-table-column>
           <el-table-column
             prop="sortId"
-            label="垃圾类别"
+            label="正确答案"
             width="120">
             <template slot-scope="scope">
               <el-tag
@@ -77,38 +83,19 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="garbageFlag"
-            label="垃圾种类"
+            prop="res"
+            label="是否正确"
             width="120">
+            <template slot-scope="scope">
+              <el-tag
+                :type="pdMap[scope.row.res].style"
+                disable-transitions>{{ pdMap[scope.row.res].name }}</el-tag>
+            </template>
           </el-table-column>
           <el-table-column
             prop="gmtCreate"
             label="创建时间"
             width="120">
-          </el-table-column>
-          <el-table-column label="操作"
-                           width="240">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="primary"
-                @click="handleUpdate(scope.$index, scope.row)">上传图片
-              </el-button>
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">修改
-              </el-button>
-              <el-popconfirm
-                title="确定删除吗？"
-                @confirm="handleDelete(scope.$index, scope.row)"
-              >
-                <el-button
-                  size="mini"
-                  type="danger"
-                  slot="reference">删除
-                </el-button>
-              </el-popconfirm>
-            </template>
           </el-table-column>
         </el-table>
         <div style="text-align: center;margin-top: 30px;">
@@ -120,22 +107,16 @@
           </el-pagination>
         </div>
       </div>
-      <add-garbage ref="addGarbage" :options="options" @ok="handleOK"></add-garbage>
-      <edit-garbage ref="editGarbage" :options="options" @ok="handleOK"></edit-garbage>
-      <upload-file ref="uploadFile"></upload-file>
     </div>
   </div>
 </template>
 
 <script>
   import request from '../utils/request'
-  import AddGarbage from './module/AddGarbage'
-  import EditGarbage from './module/EditGarbage'
-  import UploadFile from './module/UploadFile'
 
   export default {
-    name: 'GarbageManage',
-    components: {EditGarbage, AddGarbage, UploadFile},
+    name: 'ExamLog',
+    components: {},
     data () {
       return {
         styleMap: [
@@ -157,6 +138,16 @@
           {
             style: 'info',
             name: '其他垃圾'
+          }
+        ],
+        pdMap: [
+          {
+            style: 'success',
+            name: '正确'
+          },
+          {
+            style: 'danger',
+            name: '错误'
           }
         ],
         options: [
@@ -202,15 +193,19 @@
         }
         this.loading = true
         const that = this
-        request.postNoJSON({url: '/api/garbage/list4Table', data: req}).then(res => {
+        request.postNoJSON({url: '/api/exam/list', data: req}).then(res => {
           if (res.message === 'success') {
             that.tableData = res.result.data
             that.total = res.result.totalCount
+            for (let i = 0; i < that.tableData.length; i++) {
+              if (that.tableData[i].answerId === that.tableData[i].sortId) {
+                that.tableData[i].res = 0
+              } else {
+                that.tableData[i].res = 1
+              }
+            }
           } else {
-            this.$message({
-              type: 'error',
-              showClose: true,
-              message: '查询失败'})
+            this.$message.error('查询失败')
           }
           that.loading = false
         }).catch(err => {
@@ -230,44 +225,6 @@
         this.fetchData()
       },
       handleSelectionChange () {
-      },
-      handleUpdate (index, row) {
-        this.$refs.uploadFile.show(row)
-      },
-      handleEdit (index, row) {
-        // console.log(index, row)
-        this.$refs.editGarbage.show(row)
-      },
-      handleDelete (index, row) {
-        // console.log(index, row)
-        const that = this
-        request.postNoJSON({url: '/api/garbage/remove', data: row.garbageId.toString()}).then(res => {
-          if (res.result === 'error') {
-            this.$message({
-              type: 'error',
-              showClose: true,
-              message: res.result || '删除失败'})
-          } else {
-            this.$message({
-              type: 'success',
-              showClose: true,
-              message: '删除成功'})
-            if (that.total % 10 === 0 && that.pageNo > 1) {
-              that.pageNo--
-            }
-            that.handleOK()
-            that.visible = false
-          }
-        }).catch(err => {
-          this.$message({
-            type: 'error',
-            showClose: true,
-            message: '删除失败'})
-          console.log(err)
-        })
-      },
-      addGarbage () {
-        this.$refs.addGarbage.show()
       },
       handleOK () {
         this.$nextTick().then(() => {

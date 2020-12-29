@@ -12,18 +12,37 @@
         <div class="menu">
           <el-menu style="border: none"
                    @select="handleSelect"
-                   :default-active="$route.path.substr($route.path.lastIndexOf('/') + 1)"
+                   :default-active="$route.path"
                    class="el-menu-demo"
                    mode="horizontal"
                    router>
-            <el-menu-item index="userInfo">用户信息</el-menu-item>
-            <el-menu-item index="sortTrash">开始游戏</el-menu-item>
-            <el-menu-item index="garbageManage">题库管理</el-menu-item>
-            <el-menu-item index="analysis">数据统计</el-menu-item>
+            <el-menu-item
+              v-for="menu in menuList"
+              v-bind:key="menu.menuId"
+              :index="nameMap[menu.menuSort]">{{ menu.menuName }}</el-menu-item>
+            <el-submenu
+              v-for="menu in menuList2"
+              v-bind:key="menu.menuId"
+              :index="nameMap[menu.menuSort]">
+              <template slot="title">{{ menu.menuName }}</template>
+              <el-menu-item
+                v-for="subMenu in menu.children"
+                v-bind:key="subMenu.menuSort"
+                :index="subNameMap[subMenu.menuSort]">{{ subMenu.menuName }}</el-menu-item>
+            </el-submenu>
           </el-menu>
         </div>
-        <div class="logout" @click="logout">
-          <span style="font-family: 'Hiragino Sans GB', serif;">退出登录</span>
+        <div class="menu_right">
+          <el-tag
+            type="info"
+            size="medium"
+            style="font-size: 16px"
+            @click="$router.push({name: 'SortTrash'})">开始练习</el-tag>
+          <el-tag
+            type="danger"
+            size="medium"
+            style="margin-left: 16px; font-size: 16px"
+            @click="logout">退出登录</el-tag>
         </div>
       </div>
     </el-header>
@@ -34,78 +53,106 @@
 </template>
 
 <script>
-export default {
-  name: 'MenuLayout',
-  data () {
-    return {
-      active: ''
-    }
-  },
-  methods: {
-    changeActive () {
-      let path = this.$route.path
-      this.active = path.substr(path.lastIndexOf('/') + 1)
-      this.active = this.active.substr(0, 1).toUpperCase() + this.active.substr(1)
+  export default {
+    name: 'MenuLayout',
+    data () {
+      return {
+        menuList: [],
+        menuList2: [],
+        active: '',
+        nameMap: {
+          1: '/menu/userInfo',
+          2: '/menu/userManage',
+          3: '/menu/garbageManage',
+          4: '/menu/analysis',
+          5: '/menu/exam'
+        },
+        subNameMap: {
+          1: '/menu/analysis/garbageAnalysis',
+          2: '/menu/analysis/userAnalysis',
+          3: '/menu/analysis/examLog'
+        }
+      }
     },
-    handleSelect (key, keyPath) {
-      // console.log(key, keyPath)
-      // if (key !== this.active) {
-      //   const that = this
-      //   this.$router.push({name: key}).then(
-      //     that.active = key
-      //   )
-      // }
+    created () {
+      const list = JSON.parse(localStorage.getItem('roles'))
+      this.menuList = []
+      this.menuList2 = []
+      for (let item of list) {
+        if (item.menuCode === 'menu') {
+          for (let menu of item.children) {
+            if (menu.children.length > 0) {
+              this.menuList2.push(menu)
+            } else {
+              this.menuList.push(menu)
+            }
+          }
+        }
+      }
     },
-    goBack () {
-      this.$router.back()
-      this.changeActive()
-    },
-    logout () {
-      console.log(this.$confirm)
-      this.$confirm('确定要退出登录吗', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(function() {
-        localStorage.removeItem('access-token')
-        window.location.href = '/'
-      }).catch((err) => {
-        console.log(err)
-      })
+    methods: {
+      changeActive () {
+        let path = this.$route.path
+        this.active = path.substr(path.lastIndexOf('/') + 1)
+        this.active = this.active.substr(0, 1).toUpperCase() + this.active.substr(1)
+      },
+      handleSelect (key, keyPath) {
+        // console.log(key, keyPath)
+        // if (key !== this.active) {
+        //   const that = this
+        //   this.$router.push({name: key}).then(
+        //     that.active = key
+        //   )
+        // }
+      },
+      goBack () {
+        this.$router.back()
+        this.changeActive()
+      },
+      logout () {
+        this.$confirm('确定要退出登录吗', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          localStorage.removeItem('access-token')
+          window.location.href = '/'
+        }).catch(() => {
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped>
-.header {
-  width: 100%;
-  height: 60px;
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  border-bottom: 1px solid lightgrey;
-}
+  .header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    border-bottom: 1px solid lightgrey;
+  }
 
-.theme {
-  width: 310px;
-  display: flex;
-}
+  .theme {
+    width: 310px;
+    display: flex;
+  }
 
-.menu {
-  width: 100%;
-  margin-left: 32px;
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-}
+  .menu {
+    width: 100%;
+    margin-left: 32px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+  }
 
-.logout {
-  width: 136px;
-  display: flex;
-  justify-content: center;
-  margin-left: auto;
-  line-height: 60px;
-  cursor: pointer;
-}
+  .menu_right {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    cursor: pointer;
+    font-family: 'Hiragino Sans GB', serif;
+  }
 </style>

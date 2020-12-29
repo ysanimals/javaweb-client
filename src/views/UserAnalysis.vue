@@ -4,18 +4,6 @@
       <el-form status-icon ref="form" label-width="100px" class="demo-ruleForm">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="审核状态">
-              <el-select v-model="queryParam.userType" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="用户名">
               <el-input
                 type="text"
@@ -34,11 +22,33 @@
         </el-row>
         <el-row>
           <el-col :span="8">
+            <el-form-item label="按字段排序">
+              <el-select v-model="sortField" placeholder="请选择">
+                <el-option
+                  v-for="item in styleMap"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="排序方式">
+              <el-select v-model="sortOrder" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item>
-              <el-button
-                type="primary"
-                @click="fetchData">查询</el-button>
-              <el-button @click="queryParam={}">重置</el-button>
+              <el-button type="primary" @click="fetchData">查询</el-button>
+              <el-button @click="clearAll">重置</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -62,38 +72,34 @@
             width="85">
           </el-table-column>
           <el-table-column
-            prop="userType"
-            label="审核状态"
-            width="85">
-            <template slot-scope="scope">
-              <el-tag
-                :type="styleMap[scope.row.userType].style"
-                disable-transitions>{{ styleMap[scope.row.userType].name }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column
             prop="phone"
             label="电话"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="idNumber"
-            label="身份证号"
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="gmtCreate"
-            label="创建时间"
+            prop="total"
+            label="答题总数"
             width="120">
           </el-table-column>
-          <el-table-column label="操作"
-                           width="150">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">审核
-              </el-button>
-            </template>
+          <el-table-column
+            prop="right"
+            label="答对题数"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="wrong"
+            label="答错题数"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="noAnswer"
+            label="未答题数"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="accuracyShow"
+            label="正确率"
+            width="120">
           </el-table-column>
         </el-table>
         <div style="text-align: center;margin-top: 30px;">
@@ -125,30 +131,30 @@
       return {
         styleMap: [
           {
-            style: 'info',
-            name: '审核中'
+            value: 'total',
+            label: '答题次数'
           },
           {
-            style: 'primary',
-            name: '通过'
+            value: 'u.right',
+            label: '正确次数'
           },
           {
-            style: 'danger',
-            name: '未通过'
+            value: 'wrong',
+            label: '错误次数'
+          },
+          {
+            value: 'accuracy',
+            label: '正确率'
           }
         ],
         options: [
           {
-            value: 0,
-            label: '审核中'
+            value: 'asc',
+            label: '升序'
           },
           {
-            value: 1,
-            label: '通过'
-          },
-          {
-            value: 2,
-            label: '不通过'
+            value: 'desc',
+            label: '降序'
           }
         ],
         queryParam: {},
@@ -157,7 +163,9 @@
         total: 0,
         pageSize: 10,
         currentPage: 1,
-        loading: false
+        loading: false,
+        sortField: null,
+        sortOrder: null
       }
     },
     created () {
@@ -170,15 +178,18 @@
         let req = {
           pageNo: this.currentPage,
           pageSize: this.pageSize,
-          // sortField: '',
-          // sortOrder: '',
+          sortField: this.sortField,
+          sortOrder: this.sortOrder == null ? 'desc' : this.sortOrder,
           queryParam: JSON.stringify(this.queryParam)
         }
         this.loading = true
         const that = this
-        request.postNoJSON({url: '/api/user/list4Table', data: req}).then(res => {
+        request.postNoJSON({url: '/api/user/statistics', data: req}).then(res => {
           if (res.message === 'success') {
             that.tableData = res.result.data
+            for (let i = 0; i < that.tableData.length; i++) {
+              that.tableData[i].accuracyShow = that.tableData[i].accuracy * 100 + '%'
+            }
             that.total = res.result.totalCount
           } else {
             this.$message({
@@ -198,7 +209,11 @@
       goBack () {
         this.$router.back()
       },
-
+      clearAll () {
+        this.queryParam = {}
+        this.sortField = null
+        this.sortOrder = null
+      },
       current_change (currentPage) {
         this.currentPage = currentPage
         this.fetchData()

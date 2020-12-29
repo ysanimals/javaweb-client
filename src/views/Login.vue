@@ -62,8 +62,20 @@
                          placeholder="请输入验证码">
                 </label>
                 <div class="codeContainer">
-                  <img class="codeImage" :src="imgInfo.src" alt="" id="codeImage" ref="codeImage"
-                       @click="changeCode(this)">
+                  <el-image
+                    class="codeImage"
+                    :src="imgInfo.src"
+                    fit="fill"
+                    @click="changeCode(this)"
+                    id="codeImage"
+                    ref="codeImage">
+                    <div
+                      v-if="loading"
+                      slot="error"
+                      class="image-slot">
+                      加载中
+                    </div>
+                  </el-image>
                 </div>
               </div>
               <div class="buttons">
@@ -107,7 +119,8 @@
         imgInfo: {
           src: '',
           imgCodeKey: ''
-        }
+        },
+        loading: true
       }
     },
     created () {
@@ -132,11 +145,14 @@
         }
       },
       changeCode () {
+        this.loading = true
         const that = this
         request.get({url: 'api/code/getImgCode'}).then(res => {
           that.imgInfo.src = res.data
           that.imgInfo.imgCodeKey = res.imgCodeKey
+          that.loading = false
         }).catch(err => {
+          that.loading = false
           console.log(err)
         })
       },

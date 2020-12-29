@@ -2,14 +2,17 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '../views/Login'
 import Register from '../views/Register'
-import Exam from '../views/Exam'
-import Table from '../views/Table'
 import UserInfo from '../views/UserInfo'
 import SortTrash from '../views/SortTrash'
 import GarbageManage from '../views/GarbageManage'
 import Analysis from '../views/Analysis'
 import PageView from '../Layout/PageView'
 import MenuLayout from '../Layout/MenuLayout'
+import UserManage from '../views/UserManage'
+import Exam from '../views/Exam'
+import GarbageAnalysis from '../views/GarbageAnalysis'
+import UserAnalysis from '../views/UserAnalysis'
+import ExamLog from '../views/ExamLog'
 
 Vue.use(Router)
 
@@ -27,7 +30,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: 'login',
+      redirect: '/login',
       component: PageView,
       children: [
         {
@@ -40,7 +43,7 @@ export default new Router({
           }
         },
         {
-          path: 'register',
+          path: '/register',
           name: 'Register',
           component: Register,
           meta: {
@@ -49,62 +52,94 @@ export default new Router({
           }
         },
         {
-          path: 'exam',
-          name: 'Exam',
-          component: Exam,
+          path: '/sortTrash',
+          name: 'SortTrash',
+          component: SortTrash,
           meta: {
-            title: '垃圾分类试卷',
-            keepAlive: true
-          }
-        },
-        {
-          path: 'table',
-          name: 'Table',
-          component: Table,
-          meta: {
-            title: '题库表',
+            title: '垃圾分类小游戏',
             keepAlive: true
           }
         },
         {
           path: '/menu',
-          redirect: 'userInfo',
+          name: 'Menu',
+          redirect: '/menu/userInfo',
           component: MenuLayout,
+          meta: { permission: ['menu'] },
           children: [
             {
-              path: 'userInfo',
+              path: '/menu/userInfo',
               name: 'UserInfo',
               component: UserInfo,
               meta: {
-                title: '垃圾分类小游戏',
-                keepAlive: true
+                keepAlive: true,
+                permission: ['menu-userInfo']
               }
             },
             {
-              path: 'sortTrash',
-              name: 'SortTrash',
-              component: SortTrash,
+              path: '/menu/userManage',
+              name: 'UserManage',
+              component: UserManage,
               meta: {
-                title: '垃圾分类小游戏',
-                keepAlive: true
+                keepAlive: true,
+                permission: ['menu-userManage']
               }
             },
             {
-              path: 'garbageManage',
+              path: '/menu/garbageManage',
               name: 'GarbageManage',
               component: GarbageManage,
               meta: {
-                title: '垃圾分类小游戏',
-                keepAlive: true
+                keepAlive: true,
+                permission: ['menu-userManage']
               }
             },
             {
-              path: 'analysis',
+              path: '/menu/analysis',
               name: 'Analysis',
+              redirect: '/menu/analysis/garbageAnalysis',
               component: Analysis,
               meta: {
-                title: '垃圾分类小游戏',
-                keepAlive: true
+                keepAlive: true,
+                permission: ['menu-analysis']
+              },
+              children: [
+                {
+                  path: '/menu/analysis/garbageAnalysis',
+                  name: 'GarbageAnalysis',
+                  component: GarbageAnalysis,
+                  meta: {
+                    keepAlive: true,
+                    permission: ['menu-analysis-garbage']
+                  }
+                },
+                {
+                  path: '/menu/analysis/userAnalysis',
+                  name: 'UserAnalysis',
+                  component: UserAnalysis,
+                  meta: {
+                    keepAlive: true,
+                    permission: ['menu-analysis-user']
+                  }
+                },
+                {
+                  path: '/menu/analysis/examLog',
+                  name: 'ExamLog',
+                  component: ExamLog,
+                  meta: {
+                    keepAlive: true,
+                    permission: ['menu-analysis-exam']
+                  }
+                }
+              ]
+            },
+            {
+              path: 'exam',
+              name: 'Exam',
+              component: Exam,
+              meta: {
+                keepAlive: true,
+                permission: ['menu-exam']
               }
             }
           ]
