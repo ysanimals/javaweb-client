@@ -86,7 +86,7 @@
             label="创建时间"
             width="120">
           </el-table-column>
-          <el-table-column label="操作"/>
+          <el-table-column label="操作"
                            width="240">
             <template slot-scope="scope">
               <el-button
