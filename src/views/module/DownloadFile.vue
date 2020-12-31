@@ -14,25 +14,25 @@
 
 <script>
 
-  export default {
-    name: 'DownloadFile',
-    data () {
-      return {
-        url: '',
-        visible: false
+export default {
+  name: 'DownloadFile',
+  data () {
+    return {
+      url: '',
+      visible: false
+    }
+  },
+  methods: {
+    show (record) {
+      if (record.imageUrl && record.imageUrl.length > 0) {
+        this.url = record.imageUrl
+      } else {
+        this.url = ''
       }
-    },
-    methods: {
-      show (record) {
-        if (record.imageUrl && record.imageUrl.length > 0) {
-          this.url = record.imageUrl
-        } else {
-          this.url = ''
-        }
-        this.visible = true
-      }
+      this.visible = true
     }
   }
+}
 </script>
 
 <style scoped>

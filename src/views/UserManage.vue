@@ -111,129 +111,129 @@
 </template>
 
 <script>
-  import request from '../utils/request'
-  import EditUser from './module/EditUser'
-  import PageTable from '../components/PageTable'
+import request from '../utils/request'
+import EditUser from './module/EditUser'
+import PageTable from '../components/PageTable'
 
-  export default {
-    name: 'UserManage',
-    components: {
-      EditUser,
-      PageTable
-    },
-    data () {
-      return {
-        styleMap: [
-          {
-            style: 'info',
-            name: '审核中'
-          },
-          {
-            style: 'primary',
-            name: '通过'
-          },
-          {
-            style: 'danger',
-            name: '未通过'
-          }
-        ],
-        options: [
-          {
-            value: 0,
-            label: '审核中'
-          },
-          {
-            value: 1,
-            label: '通过'
-          },
-          {
-            value: 2,
-            label: '不通过'
-          }
-        ],
-        queryParam: {},
-        tableData: [],
-        multipleSelection: [],
-        total: 0,
-        pageSize: 10,
-        currentPage: 1,
-        loading: false
+export default {
+  name: 'UserManage',
+  components: {
+    EditUser,
+    PageTable
+  },
+  data () {
+    return {
+      styleMap: [
+        {
+          style: 'info',
+          name: '审核中'
+        },
+        {
+          style: 'primary',
+          name: '通过'
+        },
+        {
+          style: 'danger',
+          name: '未通过'
+        }
+      ],
+      options: [
+        {
+          value: 0,
+          label: '审核中'
+        },
+        {
+          value: 1,
+          label: '通过'
+        },
+        {
+          value: 2,
+          label: '不通过'
+        }
+      ],
+      queryParam: {},
+      tableData: [],
+      multipleSelection: [],
+      total: 0,
+      pageSize: 10,
+      currentPage: 1,
+      loading: false
+    }
+  },
+  created () {
+    this.fetchData()
+  },
+  filters: {
+  },
+  methods: {
+    fetchData () {
+      let req = {
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+        // sortField: '',
+        // sortOrder: '',
+        queryParam: JSON.stringify(this.queryParam)
       }
+      this.loading = true
+      const that = this
+      request.postNoJSON({url: '/api/user/list4Table', data: req}).then(res => {
+        if (res.message === 'success') {
+          that.tableData = res.result.data
+          that.total = res.result.totalCount
+        } else {
+          this.$message({
+            type: 'error',
+            showClose: true,
+            message: '查询失败'})
+        }
+        that.loading = false
+      }).catch(err => {
+        that.loading = false
+        console.log(err)
+      })
     },
-    created () {
+    goto (val) {
+      this.$router.push({name: val})
+    },
+    goBack () {
+      this.$router.back()
+    },
+
+    current_change (currentPage) {
+      this.currentPage = currentPage
       this.fetchData()
     },
-    filters: {
+    handleSelectionChange () {
     },
-    methods: {
-      fetchData () {
-        let req = {
-          pageNo: this.currentPage,
-          pageSize: this.pageSize,
-          // sortField: '',
-          // sortOrder: '',
-          queryParam: JSON.stringify(this.queryParam)
-        }
-        this.loading = true
-        const that = this
-        request.postNoJSON({url: '/api/user/list4Table', data: req}).then(res => {
-          if (res.message === 'success') {
-            that.tableData = res.result.data
-            that.total = res.result.totalCount
-          } else {
-            this.$message({
-              type: 'error',
-              showClose: true,
-              message: '查询失败'})
-          }
-          that.loading = false
-        }).catch(err => {
-          that.loading = false
-          console.log(err)
-        })
-      },
-      goto (val) {
-        this.$router.push({name: val})
-      },
-      goBack () {
-        this.$router.back()
-      },
-
-      current_change (currentPage) {
-        this.currentPage = currentPage
+    handleEdit (index, row) {
+      // console.log(index, row)
+      this.$refs.editUser.show(row)
+    },
+    addUser () {
+      this.$refs.addUser.show()
+    },
+    handleOK () {
+      this.$nextTick().then(() => {
         this.fetchData()
-      },
-      handleSelectionChange () {
-      },
-      handleEdit (index, row) {
-        // console.log(index, row)
-        this.$refs.editUser.show(row)
-      },
-      addUser () {
-        this.$refs.addUser.show()
-      },
-      handleOK () {
-        this.$nextTick().then(() => {
-          this.fetchData()
-        })
-      }
+      })
     }
   }
+}
 </script>
 
 <style scoped>
 
-  .body {
-    width: 100%;
-    height: 100%;
-  }
+.body {
+  width: 100%;
+  height: 100%;
+}
 
-  .center {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+.center {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 </style>

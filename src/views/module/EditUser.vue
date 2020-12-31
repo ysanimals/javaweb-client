@@ -54,72 +54,72 @@
 </template>
 
 <script>
-  import request from '../../utils/request'
+import request from '../../utils/request'
 
-  export default {
-    name: 'EditUser',
-    props: {
-    },
-    data () {
-      return {
-        visible: false,
-        options: [
-          {
-            value: 1,
-            label: '通过'
-          },
-          {
-            value: 2,
-            label: '不通过'
-          }
-        ],
-        user: {},
-        rules: {
-          userType: [
-            { required: true, message: '请输入审核状态', trigger: 'blur' }
-          ]
+export default {
+  name: 'EditUser',
+  props: {
+  },
+  data () {
+    return {
+      visible: false,
+      options: [
+        {
+          value: 1,
+          label: '通过'
+        },
+        {
+          value: 2,
+          label: '不通过'
         }
+      ],
+      user: {},
+      rules: {
+        userType: [
+          { required: true, message: '请输入审核状态', trigger: 'blur' }
+        ]
       }
+    }
+  },
+  methods: {
+    show (record) {
+      let obj = JSON.stringify(record)
+      this.user = JSON.parse(obj)
+      this.user.userType = null
+      this.visible = true
     },
-    methods: {
-      show (record) {
-        let obj = JSON.stringify(record)
-        this.user = JSON.parse(obj)
-        this.user.userType = null
-        this.visible = true
-      },
-      handleSubmit () {
-        const that = this
-        this.$refs['form'].validate((valid) => {
-          if (valid) {
-            request.postNoJSON({url: '/api/user/update', data: that.user}).then(res => {
-              if (res.result === 'error') {
-                this.$message({
-                  type: 'error',
-                  showClose: true,
-                  message: res.result || '修改失败'})
-              } else {
-                this.$message({
-                  type: 'success',
-                  showClose: true,
-                  message: '修改成功'})
-                that.visible = false
-                that.$emit('ok')
-              }
-            }).catch(err => {
+    handleSubmit () {
+      const that = this
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          request.postNoJSON({url: '/api/user/update', data: that.user}).then(res => {
+            if (res.result === 'error') {
               this.$message({
                 type: 'error',
                 showClose: true,
-                message: '修改失败'})
-              console.log(err)
-            })
-          } else {
-            return false
-          }
-        })
-      }
+                message: res.result || '修改失败'})
+            } else {
+              this.$message({
+                type: 'success',
+                showClose: true,
+                message: '修改成功'})
+              that.visible = false
+              that.$emit('ok')
+            }
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              showClose: true,
+              message: '修改失败'})
+            console.log(err)
+          })
+        } else {
+          return false
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

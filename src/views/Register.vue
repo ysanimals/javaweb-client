@@ -102,255 +102,255 @@
 </template>
 
 <script>
-  import md5 from 'md5'
-  import request from '../utils/request'
+import md5 from 'md5'
+import request from '../utils/request'
 
-  export default {
-    name: 'Register',
-    data () {
-      return {
-        clickType: true,
-        // 手机号正则表达式
-        phoneRe: /^1([3456789])\d{9}$/,
-        // 邮箱正则表达式
-        // const emailRe = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+(([.\-])[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
-        // 密码正则表达式，不小于8位的数字字母组合值
-        pwdRe: /(?=.*\d)(?=.*[A-z])^[0-9A-z]{8,}$/,
-        cardRe: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/,
-        form: {}
+export default {
+  name: 'Register',
+  data () {
+    return {
+      clickType: true,
+      // 手机号正则表达式
+      phoneRe: /^1([3456789])\d{9}$/,
+      // 邮箱正则表达式
+      // const emailRe = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+(([.\-])[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
+      // 密码正则表达式，不小于8位的数字字母组合值
+      pwdRe: /(?=.*\d)(?=.*[A-z])^[0-9A-z]{8,}$/,
+      cardRe: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/,
+      form: {}
+    }
+  },
+  created () {
+  },
+  methods: {
+
+    check () {
+      const phone = this.form.phone
+      const password = this.form.password
+      const checkPwd = this.form.checkPwd
+      const userName = this.form.userName
+      const idNumber = this.form.idNumber
+      let flag = phone && password && checkPwd && userName && idNumber &&
+        phone.length > 0 && password.length > 0 && checkPwd.length > 0 && userName.length > 0 &&
+        idNumber.length > 0
+      if (!flag) {
+        this.$message({
+          type: 'error',
+          showClose: true,
+          message: '信息填写不完整'})
+        return false
       }
+      if (!this.phoneRe.test(phone)) {
+        this.$message({
+          type: 'error',
+          showClose: true,
+          message: '手机号格式不正确'})
+        return false
+      }
+      if (password === checkPwd) {
+        if (!this.pwdRe.test(checkPwd)) {
+          this.$message({
+            type: 'error',
+            showClose: true,
+            message: '登录密码格式不正确'})
+          return false
+        }
+      } else {
+        this.$message({
+          type: 'error',
+          showClose: true,
+          message: '确认密码必须和输入的密码相同'})
+        return false
+      }
+      if (!this.cardRe.test(idNumber)) {
+        this.$message({
+          type: 'error',
+          showClose: true,
+          message: '身份证号格式不正确'})
+        return false
+      }
+      return true
     },
-    created () {
-    },
-    methods: {
 
-      check () {
-        const phone = this.form.phone
-        const password = this.form.password
-        const checkPwd = this.form.checkPwd
-        const userName = this.form.userName
-        const idNumber = this.form.idNumber
-        let flag = phone && password && checkPwd && userName && idNumber &&
-          phone.length > 0 && password.length > 0 && checkPwd.length > 0 && userName.length > 0 &&
-          idNumber.length > 0
-        if (!flag) {
-          this.$message({
-            type: 'error',
-            showClose: true,
-            message: '信息填写不完整'})
-          return false
-        }
-        if (!this.phoneRe.test(phone)) {
-          this.$message({
-            type: 'error',
-            showClose: true,
-            message: '手机号格式不正确'})
-          return false
-        }
-        if (password === checkPwd) {
-          if (!this.pwdRe.test(checkPwd)) {
-            this.$message({
-              type: 'error',
-              showClose: true,
-              message: '登录密码格式不正确'})
-            return false
-          }
-        } else {
-          this.$message({
-            type: 'error',
-            showClose: true,
-            message: '确认密码必须和输入的密码相同'})
-          return false
-        }
-        if (!this.cardRe.test(idNumber)) {
-          this.$message({
-            type: 'error',
-            showClose: true,
-            message: '身份证号格式不正确'})
-          return false
-        }
-        return true
-      },
-
-      handleSubmit () {
-        if (!this.check()) {
-          return
-        }
-        let form = {
-          userName: this.form.userName,
-          password: md5(this.form.password),
-          phone: this.form.phone,
-          idNumber: this.form.idNumber
-        }
-        const that = this
-        this.clickType = false
-        request.postNoJSON({url: '/api/user/checkName', data: form.userName}).then(res => {
-          if (res.message === 'ok') {
-            request.postNoJSON({url: '/api/user/register', data: form}).then(res => {
-              that.clickType = true
-              if (res.message !== 'error') {
-                this.$message({
-                  type: 'success',
-                  showClose: true,
-                  message: '注册成功，请等待管理员审核'})
-                that.$router.push({name: 'Login'})
-              } else {
-                this.$message({
-                  type: 'error',
-                  showClose: true,
-                  message: res.result || '注册失败'})
-              }
-            }).catch(err => {
-              that.clickType = true
-              console.log(err)
-            })
-          } else {
+    handleSubmit () {
+      if (!this.check()) {
+        return
+      }
+      let form = {
+        userName: this.form.userName,
+        password: md5(this.form.password),
+        phone: this.form.phone,
+        idNumber: this.form.idNumber
+      }
+      const that = this
+      this.clickType = false
+      request.postNoJSON({url: '/api/user/checkName', data: form.userName}).then(res => {
+        if (res.message === 'ok') {
+          request.postNoJSON({url: '/api/user/register', data: form}).then(res => {
             that.clickType = true
-            this.$message({
-              type: 'error',
-              showClose: true,
-              message: res.result || '注册失败'})
-          }
-        }).catch(err => {
+            if (res.message !== 'error') {
+              this.$message({
+                type: 'success',
+                showClose: true,
+                message: '注册成功，请等待管理员审核'})
+              that.$router.push({name: 'Login'})
+            } else {
+              this.$message({
+                type: 'error',
+                showClose: true,
+                message: res.result || '注册失败'})
+            }
+          }).catch(err => {
+            that.clickType = true
+            console.log(err)
+          })
+        } else {
           that.clickType = true
-          console.log(err)
-        })
-      }
+          this.$message({
+            type: 'error',
+            showClose: true,
+            message: res.result || '注册失败'})
+        }
+      }).catch(err => {
+        that.clickType = true
+        console.log(err)
+      })
     }
   }
+}
 </script>
 
 <style>
-  /*html选择器*/
-  h2 {
-    color: gray;
-    font: bold 20px 微软雅黑 Light;
-  }
+/*html选择器*/
+h2 {
+  color: gray;
+  font: bold 20px 微软雅黑 Light;
+}
 
-  .center {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+.center {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-  .header {
-    width: 100%;
-    height: 40px;
-  }
+.header {
+  width: 100%;
+  height: 40px;
+}
 
-  .background {
-    width: 100%;
-    background: #020202;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
+.background {
+  width: 100%;
+  background: #020202;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
 
-  .image {
-    width: 1000px;
-    height: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    background: url("../img/background.jpg");
-    background-size: cover;
-  }
+.image {
+  width: 1000px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: url("../img/background.jpg");
+  background-size: cover;
+}
 
-  a {
-    font-size: 13px;
-    cursor: pointer;
-  }
+a {
+  font-size: 13px;
+  cursor: pointer;
+}
 
-  /*html选择器*/
-  a:link {
-    color: #337ab7;
-    text-decoration: none;
-    font-family: "微软雅黑 Light", serif;
-    font-size: 13px;
-    font-weight: bold;
-  }
+/*html选择器*/
+a:link {
+  color: #337ab7;
+  text-decoration: none;
+  font-family: "微软雅黑 Light", serif;
+  font-size: 13px;
+  font-weight: bold;
+}
 
-  /*html选择器*/
-  a:visited {
-    color: #337ab7;
-    text-decoration: none;
-    font-family: "微软雅黑 Light", serif;
-    font-size: 13px;
-    font-weight: bold;
-  }
+/*html选择器*/
+a:visited {
+  color: #337ab7;
+  text-decoration: none;
+  font-family: "微软雅黑 Light", serif;
+  font-size: 13px;
+  font-weight: bold;
+}
 
-  /*html选择器*/
-  a:hover {
-    color: #337ab7;
-    text-decoration: underline;
-    font-family: "微软雅黑 Light", serif;
-    font-size: 13px;
-    font-weight: bold;
-  }
+/*html选择器*/
+a:hover {
+  color: #337ab7;
+  text-decoration: underline;
+  font-family: "微软雅黑 Light", serif;
+  font-size: 13px;
+  font-weight: bold;
+}
 
-  /*html选择器*/
-  a:active {
-    color: #337ab7;
-    text-decoration: underline;
-    font-family: "微软雅黑 Light", serif;
-    font-size: 13px;
-    font-weight: bold;
-  }
+/*html选择器*/
+a:active {
+  color: #337ab7;
+  text-decoration: underline;
+  font-family: "微软雅黑 Light", serif;
+  font-size: 13px;
+  font-weight: bold;
+}
 
-  .tableRow {
-    height: 55px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
+.tableRow {
+  height: 55px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 
-  .label {
-    margin-left: 12px;
-    width: 80px;
-  }
+.label {
+  margin-left: 12px;
+  width: 80px;
+}
 
-  .input {
-    margin-left: 8px;
-  }
+.input {
+  margin-left: 8px;
+}
 
-  .message {
-    margin-left: 12px;
-    width: 120px;
-  }
+.message {
+  margin-left: 12px;
+  width: 120px;
+}
 
-  /*class类选择器*/
-  .registerTable {
-    width: 550px;
-  }
+/*class类选择器*/
+.registerTable {
+  width: 550px;
+}
 
-  /*class类选择器*/
-  .registerMessage {
-    color: gray;
-    font: bold 14px 微软雅黑 Light;
-  }
+/*class类选择器*/
+.registerMessage {
+  color: gray;
+  font: bold 14px 微软雅黑 Light;
+}
 
-  /*class类选择器*/
-  .registerText {
-    width: 300px;
-    font: bold 14px 微软雅黑 Light;
-    padding: 8px 10px;
-    border: silver 1px solid;
-    cursor: hand;
-  }
+/*class类选择器*/
+.registerText {
+  width: 300px;
+  font: bold 14px 微软雅黑 Light;
+  padding: 8px 10px;
+  border: silver 1px solid;
+  cursor: hand;
+}
 
-  /*class类选择器*/
-  .registerButton {
-    color: white;
-    width: 320px;
-    height: 40px;
-    font: bold 16px 微软雅黑 Light;
-    border: #337ab7 1px solid;
-    margin-left: 100px;
-    cursor: hand;
-    background: #337ab7;
-  }
+/*class类选择器*/
+.registerButton {
+  color: white;
+  width: 320px;
+  height: 40px;
+  font: bold 16px 微软雅黑 Light;
+  border: #337ab7 1px solid;
+  margin-left: 100px;
+  cursor: hand;
+  background: #337ab7;
+}
 </style>

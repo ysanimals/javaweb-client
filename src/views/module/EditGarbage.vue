@@ -47,71 +47,71 @@
 </template>
 
 <script>
-  import request from '../../utils/request'
+import request from '../../utils/request'
 
-  export default {
-    name: 'EditGarbage',
-    props: {
-      options: {
-        type: Array,
-        default: () => { return [] }
+export default {
+  name: 'EditGarbage',
+  props: {
+    options: {
+      type: Array,
+      default: () => { return [] }
+    }
+  },
+  data () {
+    return {
+      visible: false,
+      garbage: {},
+      rules: {
+        garbageFlag: [
+          { required: false, message: '请输入垃圾种类', trigger: 'blur' }
+        ],
+        garbageName: [
+          { required: true, message: '请输入垃圾名称', trigger: 'blur' }
+        ],
+        sortId: [
+          { required: true, message: '请输入垃圾类别', trigger: 'blur' }
+        ]
       }
+    }
+  },
+  methods: {
+    show (record) {
+      let obj = JSON.stringify(record)
+      this.garbage = JSON.parse(obj)
+      this.visible = true
     },
-    data () {
-      return {
-        visible: false,
-        garbage: {},
-        rules: {
-          garbageFlag: [
-            { required: false, message: '请输入垃圾种类', trigger: 'blur' }
-          ],
-          garbageName: [
-            { required: true, message: '请输入垃圾名称', trigger: 'blur' }
-          ],
-          sortId: [
-            { required: true, message: '请输入垃圾类别', trigger: 'blur' }
-          ]
-        }
-      }
-    },
-    methods: {
-      show (record) {
-        let obj = JSON.stringify(record)
-        this.garbage = JSON.parse(obj)
-        this.visible = true
-      },
-      handleSubmit () {
-        const that = this
-        this.$refs['form'].validate((valid) => {
-          if (valid) {
-            request.postNoJSON({url: '/api/garbage/update', data: that.garbage}).then(res => {
-              if (res.result === 'error') {
-                this.$message({
-                  type: 'error',
-                  showClose: true,
-                  message: res.result || '修改失败'})
-              } else {
-                this.$message({
-                  type: 'success',
-                  showClose: true,
-                  message: '修改成功'})
-                that.visible = false
-                that.$emit('ok')
-              }
-            }).catch(err => {
+    handleSubmit () {
+      const that = this
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          request.postNoJSON({url: '/api/garbage/update', data: that.garbage}).then(res => {
+            if (res.result === 'error') {
               this.$message({
                 type: 'error',
                 showClose: true,
-                message: '修改失败'})
-              console.log(err)
-            })
-          } else {
-            return false
-          }
-        })
-      }
+                message: res.result || '修改失败'})
+            } else {
+              this.$message({
+                type: 'success',
+                showClose: true,
+                message: '修改成功'})
+              that.visible = false
+              that.$emit('ok')
+            }
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              showClose: true,
+              message: '修改失败'})
+            console.log(err)
+          })
+        } else {
+          return false
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

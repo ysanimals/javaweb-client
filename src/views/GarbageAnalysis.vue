@@ -114,167 +114,167 @@
 </template>
 
 <script>
-  import request from '../utils/request'
-  import AddGarbage from './module/AddGarbage'
-  import EditGarbage from './module/EditGarbage'
-  import UploadFile from './module/UploadFile'
+import request from '../utils/request'
+import AddGarbage from './module/AddGarbage'
+import EditGarbage from './module/EditGarbage'
+import UploadFile from './module/UploadFile'
 
-  export default {
-    name: 'GarbageManage',
-    components: {EditGarbage, AddGarbage, UploadFile},
-    data () {
-      return {
-        styleMap: [
-          {
-            value: 'total',
-            label: '答题次数'
-          },
-          {
-            value: 'g.right',
-            label: '正确次数'
-          },
-          {
-            value: 'wrong',
-            label: '错误次数'
-          },
-          {
-            value: 'accuracy',
-            label: '正确率'
-          }
-        ],
-        options: [
-          {
-            value: 'asc',
-            label: '升序'
-          },
-          {
-            value: 'desc',
-            label: '降序'
-          }
-        ],
-        queryParam: {},
-        tableData: [],
-        multipleSelection: [],
-        total: 0,
-        pageSize: 10,
-        currentPage: 1,
-        loading: false,
-        sortField: null,
-        sortOrder: null
-      }
-    },
-    created () {
-      this.fetchData()
-    },
-    filters: {
-    },
-    methods: {
-      fetchData () {
-        let req = {
-          pageNo: this.currentPage,
-          pageSize: this.pageSize,
-          sortField: this.sortField,
-          sortOrder: this.sortOrder == null ? 'desc' : this.sortOrder,
-          queryParam: JSON.stringify(this.queryParam)
+export default {
+  name: 'GarbageManage',
+  components: {EditGarbage, AddGarbage, UploadFile},
+  data () {
+    return {
+      styleMap: [
+        {
+          value: 'total',
+          label: '答题次数'
+        },
+        {
+          value: 'g.right',
+          label: '正确次数'
+        },
+        {
+          value: 'wrong',
+          label: '错误次数'
+        },
+        {
+          value: 'accuracy',
+          label: '正确率'
         }
-        this.loading = true
-        const that = this
-        request.postNoJSON({url: '/api/garbage/statistics', data: req}).then(res => {
-          if (res.message === 'success') {
-            that.tableData = res.result.data
-            for (let i = 0; i < that.tableData.length; i++) {
-              that.tableData[i].accuracyShow = that.tableData[i].accuracy * 100 + '%'
-            }
-            that.total = res.result.totalCount
-          } else {
-            this.$message({
-              type: 'error',
-              showClose: true,
-              message: '查询失败'})
+      ],
+      options: [
+        {
+          value: 'asc',
+          label: '升序'
+        },
+        {
+          value: 'desc',
+          label: '降序'
+        }
+      ],
+      queryParam: {},
+      tableData: [],
+      multipleSelection: [],
+      total: 0,
+      pageSize: 10,
+      currentPage: 1,
+      loading: false,
+      sortField: null,
+      sortOrder: null
+    }
+  },
+  created () {
+    this.fetchData()
+  },
+  filters: {
+  },
+  methods: {
+    fetchData () {
+      let req = {
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder == null ? 'desc' : this.sortOrder,
+        queryParam: JSON.stringify(this.queryParam)
+      }
+      this.loading = true
+      const that = this
+      request.postNoJSON({url: '/api/garbage/statistics', data: req}).then(res => {
+        if (res.message === 'success') {
+          that.tableData = res.result.data
+          for (let i = 0; i < that.tableData.length; i++) {
+            that.tableData[i].accuracyShow = that.tableData[i].accuracy * 100 + '%'
           }
-          that.loading = false
-        }).catch(err => {
-          that.loading = false
-          console.log(err)
-        })
-      },
-      goto (val) {
-        this.$router.push({name: val})
-      },
-      goBack () {
-        this.$router.back()
-      },
-      clearAll () {
-        this.queryParam = {}
-        this.sortField = null
-        this.sortOrder = null
-      },
-      current_change (currentPage) {
-        this.currentPage = currentPage
-        this.fetchData()
-      },
-      handleSelectionChange () {
-      },
-      handleUpdate (index, row) {
-        this.$refs.uploadFile.show(row)
-      },
-      handleEdit (index, row) {
-        // console.log(index, row)
-        this.$refs.editGarbage.show(row)
-      },
-      handleDelete (index, row) {
-        // console.log(index, row)
-        const that = this
-        request.postNoJSON({url: '/api/garbage/remove', data: row.garbageId.toString()}).then(res => {
-          if (res.result === 'error') {
-            this.$message({
-              type: 'error',
-              showClose: true,
-              message: res.result || '删除失败'})
-          } else {
-            this.$message({
-              type: 'success',
-              showClose: true,
-              message: '删除成功'})
-            if (that.total % 10 === 0 && that.pageNo > 1) {
-              that.pageNo--
-            }
-            that.handleOK()
-            that.visible = false
-          }
-        }).catch(err => {
+          that.total = res.result.totalCount
+        } else {
           this.$message({
             type: 'error',
             showClose: true,
-            message: '删除失败'})
-          console.log(err)
-        })
-      },
-      addGarbage () {
-        this.$refs.addGarbage.show()
-      },
-      handleOK () {
-        this.$nextTick().then(() => {
-          this.fetchData()
-        })
-      }
+            message: '查询失败'})
+        }
+        that.loading = false
+      }).catch(err => {
+        that.loading = false
+        console.log(err)
+      })
+    },
+    goto (val) {
+      this.$router.push({name: val})
+    },
+    goBack () {
+      this.$router.back()
+    },
+    clearAll () {
+      this.queryParam = {}
+      this.sortField = null
+      this.sortOrder = null
+    },
+    current_change (currentPage) {
+      this.currentPage = currentPage
+      this.fetchData()
+    },
+    handleSelectionChange () {
+    },
+    handleUpdate (index, row) {
+      this.$refs.uploadFile.show(row)
+    },
+    handleEdit (index, row) {
+      // console.log(index, row)
+      this.$refs.editGarbage.show(row)
+    },
+    handleDelete (index, row) {
+      // console.log(index, row)
+      const that = this
+      request.postNoJSON({url: '/api/garbage/remove', data: row.garbageId.toString()}).then(res => {
+        if (res.result === 'error') {
+          this.$message({
+            type: 'error',
+            showClose: true,
+            message: res.result || '删除失败'})
+        } else {
+          this.$message({
+            type: 'success',
+            showClose: true,
+            message: '删除成功'})
+          if (that.total % 10 === 0 && that.pageNo > 1) {
+            that.pageNo--
+          }
+          that.handleOK()
+          that.visible = false
+        }
+      }).catch(err => {
+        this.$message({
+          type: 'error',
+          showClose: true,
+          message: '删除失败'})
+        console.log(err)
+      })
+    },
+    addGarbage () {
+      this.$refs.addGarbage.show()
+    },
+    handleOK () {
+      this.$nextTick().then(() => {
+        this.fetchData()
+      })
     }
   }
+}
 </script>
 
 <style scoped>
 
-  .body {
-    width: 100%;
-    height: 100%;
-  }
+.body {
+  width: 100%;
+  height: 100%;
+}
 
-  .center {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+.center {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 </style>

@@ -47,69 +47,69 @@
 </template>
 
 <script>
-  import request from '../../utils/request'
+import request from '../../utils/request'
 
-  export default {
-    name: 'AddGarbage',
-    props: {
-      options: {
-        type: Array,
-        default: () => { return [] }
+export default {
+  name: 'AddGarbage',
+  props: {
+    options: {
+      type: Array,
+      default: () => { return [] }
+    }
+  },
+  data () {
+    return {
+      visible: false,
+      garbage: {},
+      rules: {
+        garbageFlag: [
+          { required: false, message: '请输入垃圾种类', trigger: 'blur' }
+        ],
+        garbageName: [
+          { required: true, message: '请输入垃圾名称', trigger: 'blur' }
+        ],
+        sortId: [
+          { required: true, message: '请输入垃圾类别', trigger: 'blur' }
+        ]
       }
+    }
+  },
+  methods: {
+    show () {
+      this.visible = true
     },
-    data () {
-      return {
-        visible: false,
-        garbage: {},
-        rules: {
-          garbageFlag: [
-            { required: false, message: '请输入垃圾种类', trigger: 'blur' }
-          ],
-          garbageName: [
-            { required: true, message: '请输入垃圾名称', trigger: 'blur' }
-          ],
-          sortId: [
-            { required: true, message: '请输入垃圾类别', trigger: 'blur' }
-          ]
-        }
-      }
-    },
-    methods: {
-      show () {
-        this.visible = true
-      },
-      handleSubmit () {
-        const that = this
-        this.$refs['form'].validate((valid) => {
-          if (valid) {
-            request.postNoJSON({url: '/api/garbage/add', data: that.garbage}).then(res => {
-              if (res.result === 'error') {
-                this.$message({
-                  type: 'error',
-                  showClose: true,
-                  message: res.result || '添加失败'})
-              } else {
-                this.$message({
-                  type: 'success',
-                  showClose: true,
-                  message: '添加成功'})
-                that.visible = false
-                that.$emit('ok')
-              }
-            }).catch(err => {
+    handleSubmit () {
+      const that = this
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          request.postNoJSON({url: '/api/garbage/add', data: that.garbage}).then(res => {
+            if (res.result === 'error') {
               this.$message({
                 type: 'error',
                 showClose: true,
-                message: '添加失败'})
-              console.log(err)
-            })
-          } else {
-            return false
-          }
-        })
-      }
+                message: res.result || '添加失败'})
+            } else {
+              this.$message({
+                type: 'success',
+                showClose: true,
+                message: '添加成功'})
+              that.visible = false
+              that.$emit('ok')
+            }
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              showClose: true,
+              message: '添加失败'})
+            console.log(err)
+          })
+        } else {
+          return false
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

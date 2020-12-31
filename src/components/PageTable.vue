@@ -31,68 +31,68 @@
 </template>
 
 <script>
-import request from '../utils/request'
+  import request from '../utils/request'
 
-export default {
-  name: 'PageTable',
-  props: {
-    columns: {
-      type: Array,
-      default: () => { return [] }
-    },
-    fetchData: {
-      type: Function,
-      required: true
-    }
-  },
-  data () {
-    return {
-      tableData: [],
-      total: 0,
-      pageSize: 10,
-      currentPage: 1,
-      multipleSelection: [],
-      loading: false
-    }
-  },
-  created () {
-    this.handleFetch()
-  },
-  methods: {
-    handleFetch () {
-      let req = {
-        pageNo: this.currentPage,
-        pageSize: this.pageSize,
-        // sortField: '',
-        // sortOrder: '',
-        queryParam: JSON.stringify(this.queryParam)
+  export default {
+    name: 'PageTable',
+    props: {
+      columns: {
+        type: Array,
+        default: () => { return [] }
+      },
+      fetchData: {
+        type: Function,
+        required: true
       }
-      this.loading = true
-      const that = this
-      request.postNoJSON({url: '/api/garbage/list4Table', data: req}).then(res => {
-        if (res.message === 'success') {
-          that.tableData = res.result.data
-          that.total = res.result.totalCount
-        } else {
-          this.$message({
-            type: 'error',
-            showClose: true,
-            message: '查询失败'})
+    },
+    data () {
+      return {
+        tableData: [],
+        total: 0,
+        pageSize: 10,
+        currentPage: 1,
+        multipleSelection: [],
+        loading: false
+      }
+    },
+    created () {
+      this.handleFetch()
+    },
+    methods: {
+      handleFetch () {
+        let req = {
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          // sortField: '',
+          // sortOrder: '',
+          queryParam: JSON.stringify(this.queryParam)
         }
-        that.loading = false
-      }).catch(err => {
-        that.loading = false
-        console.log(err)
-      })
-    },
-    current_change (currentPage) {
-      this.currentPage = currentPage
-      this.fetchData()
-    },
-    handleSelectionChange () {
+        this.loading = true
+        const that = this
+        request.postNoJSON({url: '/api/garbage/list4Table', data: req}).then(res => {
+          if (res.message === 'success') {
+            that.tableData = res.result.data
+            that.total = res.result.totalCount
+          } else {
+            this.$message({
+              type: 'error',
+              showClose: true,
+              message: '查询失败'})
+          }
+          that.loading = false
+        }).catch(err => {
+          that.loading = false
+          console.log(err)
+        })
+      },
+      current_change (currentPage) {
+        this.currentPage = currentPage
+        this.fetchData()
+      },
+      handleSelectionChange () {
+      }
     }
   }
-}
 </script>
 
 <style scoped>

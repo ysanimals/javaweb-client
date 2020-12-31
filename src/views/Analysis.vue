@@ -1,34 +1,34 @@
 <template>
   <div class="body">
     <div class="center">
-      <router-view></router-view>
+          <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
 
-  export default {
-    name: 'Analysis',
-    components: {},
-    data () {
-      return {
-        activeName: '',
-        menus: [],
-        nameMap: {
-          1: 'garbageAnalysis',
-          2: 'userAnalysis',
-          3: 'examLog'
-        }
+export default {
+  name: 'Analysis',
+  components: {},
+  data () {
+    return {
+      activeName: '',
+      menus: [],
+      nameMap: {
+        1: 'garbageAnalysis',
+        2: 'userAnalysis',
+        3: 'examLog'
       }
-    },
-    created () {
-    },
-    filters: {
-    },
-    methods: {
     }
+  },
+  created () {
+  },
+  filters: {
+  },
+  methods: {
   }
+}
 </script>
 
 <style scoped>
