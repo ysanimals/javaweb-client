@@ -76,6 +76,7 @@
     },
     created () {
       const list = JSON.parse(localStorage.getItem('roles'))
+      console.log(list)
       this.menuList = []
       this.menuList2 = []
       for (let item of list) {
