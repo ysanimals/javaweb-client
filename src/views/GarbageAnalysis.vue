@@ -179,6 +179,7 @@ export default {
       }
       this.loading = true
       const that = this
+      console.log(req)
       request.postNoJSON({url: '/api/garbage/statistics', data: req}).then(res => {
         if (res.message === 'success') {
           that.tableData = res.result.data
@@ -211,7 +212,7 @@ export default {
     },
     current_change (currentPage) {
       this.currentPage = currentPage
-      this.fetchData()
+      this.fetchData()//每次获取新的页面以后刷新当前的页表
     },
     handleSelectionChange () {
     },

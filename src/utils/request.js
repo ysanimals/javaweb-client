@@ -12,12 +12,13 @@ function requestPost (url, method, data) {
       timeout: 10000
     }).then((res) => {
       // 这边可以验证请求的token是否有效
+      console.log(res)
       if (res.headers.map.token_status[0] === 'no') {
         localStorage.removeItem('access-token')
         alert('登录已过期，请重新登录')
         window.location.href = '/'
       } else {
-        resolve(res.data)
+        resolve(res.data)//Promise.resolve(value)方法返回一个以给定值解析后的Promise 对象。如果这个值是一个 promise ，那么将返回这个 promise ；
       }
     }).catch((res) => {
       reject(res)
@@ -27,6 +28,7 @@ function requestPost (url, method, data) {
 
 // 'Content-Type': 'multipart/form-data;multipart/form-data;boundary=12341411'
 function postFile (url, data) {
+  console.log(data)
   return new Promise((resolve, reject) => {
     Vue.http.post(url, data, {
       // baseURL: 'https://tomb.xuebaeasy.com/',

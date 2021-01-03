@@ -12,6 +12,7 @@
                   <h2>
                     <!--html选择器-->
                     用户登录
+<!--                    想要导航到不同的 URL，则使用 router.push 方法。这个方法会向 history 栈添加一个新的记录，所以，当用户点击浏览器后退按钮时，则回到之前的 URL。-->
                     <a
                        @click="$router.push({name: 'Register'})"
                        target="_self">
@@ -124,7 +125,7 @@ export default {
     }
   },
   created () {
-    let token = localStorage.getItem('access-token')
+    let token = localStorage.getItem('access-token')//自动登录
     if (token && token.length > 0) {
       this.$router.replace({name: 'UserInfo'})
     }
@@ -147,7 +148,7 @@ export default {
     changeCode () {
       this.loading = true
       const that = this
-      request.get({url: 'api/code/getImgCode'}).then(res => {
+      request.get({url: 'api/code/getImgCode'}).then(res => {//获取图片验证码
         that.imgInfo.src = res.data
         that.imgInfo.imgCodeKey = res.imgCodeKey
         that.loading = false
@@ -241,7 +242,7 @@ h2 {
 
 .background {
   width: 100%;
-  background: #020202;
+  background: lightskyblue;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -259,7 +260,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  background: url("../img/background.jpg");
+  background: url("../img/photo.jpg");
   background-size: cover;
 }
 

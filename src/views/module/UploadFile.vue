@@ -85,6 +85,7 @@ export default {
     },
     handleUpload (obj) {
       let formData = new FormData()
+      console.log(obj)
       formData.append('file', obj.file)
       formData.append('garbageId', this.garbage.garbageId)
       const that = this

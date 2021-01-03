@@ -6,7 +6,7 @@
           <div class="table_block" v-for="(bin, i) in bins" v-bind:key="i">
             <div class="hand_garbage">
               <div class="hand">
-                <img v-if="bin.showHand" src="../img/hand.png" class="img" alt="">
+                <img v-if="bin.showHand" src="../img/hand.jpg" class="img" alt="">
               </div>
               <div class="garbage_type" @mouseenter="onMouseOver(i)" @mouseleave="onMouseOut(i)"
                    @click="choseGarbage(i)">
@@ -95,22 +95,22 @@ export default {
       },
       bins: [
         {
-          imgUrl: require('../img/garbage1.png'),
+          imgUrl: require('../img/cylj.png'),
           showHand: false,
           garbageType: '厨余垃圾'
         },
         {
-          imgUrl: require('../img/garbage2.png'),
+          imgUrl: require('../img/khslj.png'),
           showHand: false,
           garbageType: '可回收垃圾'
         },
         {
-          imgUrl: require('../img/garbage3.png'),
+          imgUrl: require('../img/qtlj.png'),
           showHand: false,
           garbageType: '其它垃圾'
         },
         {
-          imgUrl: require('../img/garbage4.png'),
+          imgUrl: require('../img/yhlj.png'),
           showHand: false,
           garbageType: '有害垃圾'
         }
@@ -261,6 +261,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: url("../img/back3.jpg");
 }
 
 .table {

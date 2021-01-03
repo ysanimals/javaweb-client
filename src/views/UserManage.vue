@@ -27,7 +27,7 @@
             <el-form-item label="电话">
               <el-input
                 type="text"
-                v-model="queryParam.phone"
+                v-model="queryParam.userPhone"
                 @keyup.enter.native="fetchData"></el-input>
             </el-form-item>
           </el-col>
@@ -72,12 +72,12 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="phone"
+            prop="userPhone"
             label="电话"
             width="120">
           </el-table-column>
           <el-table-column
-            prop="idNumber"
+            prop="userCard"
             label="身份证号"
             width="180">
           </el-table-column>
@@ -170,8 +170,6 @@ export default {
       let req = {
         pageNo: this.currentPage,
         pageSize: this.pageSize,
-        // sortField: '',
-        // sortOrder: '',
         queryParam: JSON.stringify(this.queryParam)
       }
       this.loading = true

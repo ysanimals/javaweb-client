@@ -73,8 +73,8 @@
                   <span class="registerMessage">身份证号：</span>
                 </div>
                 <div class="input">
-                  <label for="idNumber"></label>
-                  <input class="registerText" id="idNumber" v-model="form.idNumber" type="text">
+                  <label for="userCard"></label>
+                  <input class="registerText" id="userCard" v-model="form.userCard" type="text">
                 </div>
                 <div class="message">
                   <span class="registerMessage">有效的身份证号码</span>
@@ -129,10 +129,10 @@ export default {
       const password = this.form.password
       const checkPwd = this.form.checkPwd
       const userName = this.form.userName
-      const idNumber = this.form.idNumber
-      let flag = phone && password && checkPwd && userName && idNumber &&
+      const userCard = this.form.userCard
+      let flag = phone && password && checkPwd && userName && userCard &&
         phone.length > 0 && password.length > 0 && checkPwd.length > 0 && userName.length > 0 &&
-        idNumber.length > 0
+        userCard.length > 0
       if (!flag) {
         this.$message({
           type: 'error',
@@ -162,7 +162,7 @@ export default {
           message: '确认密码必须和输入的密码相同'})
         return false
       }
-      if (!this.cardRe.test(idNumber)) {
+      if (!this.cardRe.test(userCard)) {
         this.$message({
           type: 'error',
           showClose: true,
@@ -178,14 +178,15 @@ export default {
       }
       let form = {
         userName: this.form.userName,
-        password: md5(this.form.password),
-        phone: this.form.phone,
-        idNumber: this.form.idNumber
+        userPwd: md5(this.form.password),
+        userPhone: this.form.phone,
+        userCard: this.form.userCard
       }
       const that = this
       this.clickType = false
       request.postNoJSON({url: '/api/user/checkName', data: form.userName}).then(res => {
         if (res.message === 'ok') {
+          console.log(res)
           request.postNoJSON({url: '/api/user/register', data: form}).then(res => {
             that.clickType = true
             if (res.message !== 'error') {
@@ -243,7 +244,7 @@ h2 {
 
 .background {
   width: 100%;
-  background: #020202;
+  background: lightskyblue;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -256,7 +257,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  background: url("../img/background.jpg");
+  background: url("../img/photo.jpg");
   background-size: cover;
 }
 

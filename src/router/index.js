@@ -63,7 +63,7 @@ export default new Router({
         {
           path: '/menu',
           name: 'Menu',
-          redirect: '/menu/userInfo',
+          redirect: '/menu/userInfo',//重定向访问menu的时候重定向到userInfo
           component: MenuLayout,
           meta: { permission: ['menu'] },
           children: [
@@ -95,7 +95,7 @@ export default new Router({
               }
             },
             {
-              path: '/menu/analysis',
+              path: '/menu/analysis',//信息统计界面
               name: 'Analysis',
               redirect: '/menu/analysis/garbageAnalysis',
               component: Analysis,
@@ -123,7 +123,7 @@ export default new Router({
                   }
                 },
                 {
-                  path: '/menu/analysis/examLog',
+                  path: '/menu/analysis/examLog',//答题记录
                   name: 'ExamLog',
                   component: ExamLog,
                   meta: {

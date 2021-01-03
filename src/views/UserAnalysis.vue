@@ -184,7 +184,7 @@ export default {
       }
       this.loading = true
       const that = this
-      request.postNoJSON({url: '/api/user/statistics', data: req}).then(res => {
+      request.postNoJSON({url: '/api/user/statistics', data: req}).then(res => {//直接发送到后端 非序列化
         if (res.message === 'success') {
           that.tableData = res.result.data
           for (let i = 0; i < that.tableData.length; i++) {

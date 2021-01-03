@@ -23,12 +23,14 @@
                 @keyup.enter.native="fetchData"></el-input>
             </el-form-item>
           </el-col>
+<!--          回车触发聚焦 @keyup.enter.native-->
           <el-col :span="8">
             <el-form-item label="垃圾名称">
               <el-input
                 type="text"
                 v-model="queryParam.garbageName"
                 @keyup.enter.native="fetchData"></el-input>
+
             </el-form-item>
           </el-col>
         </el-row>
@@ -89,6 +91,7 @@
           <el-table-column label="操作"
             width="240">
             <template slot-scope="scope">
+<!--              mini修改了图标的大小 使其能够排列在一起-->
               <el-button
                 size="mini"
                 type="primary"

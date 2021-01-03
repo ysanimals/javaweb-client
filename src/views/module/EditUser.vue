@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="新增垃圾信息"
+    title="管理用户审核信息"
     :visible.sync="visible"
     width="50%">
     <el-form
@@ -20,14 +20,14 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="手机号" prop="phone">
-            <el-input type="text" v-model="user.phone" disabled></el-input>
+            <el-input type="text" v-model="user.userPhone" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="身份证号" prop="idNumber">
-            <el-input type="text" v-model="user.phone" disabled></el-input>
+          <el-form-item label="身份证号" prop="userCard">
+            <el-input type="text" v-model="user.userCard" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>
