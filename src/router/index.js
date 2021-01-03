@@ -134,7 +134,7 @@ export default new Router({
               ]
             },
             {
-              path: 'exam',
+              path: '/menu/exam',
               name: 'Exam',
               component: Exam,
               meta: {

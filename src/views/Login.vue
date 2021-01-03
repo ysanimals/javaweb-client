@@ -188,7 +188,7 @@ export default {
                 type: 'success',
                 showClose: true,
                 message: '登录成功'})
-              that.$router.push({name: 'UserInfo'})
+              that.$router.push({name: 'Exam'})
             } else {
               this.$message({
                 type: 'error',
