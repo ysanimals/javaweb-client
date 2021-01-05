@@ -33,11 +33,6 @@
           </el-menu>
         </div>
         <div class="menu_right">
-<!--          <el-tag-->
-<!--            type="info"-->
-<!--            size="medium"-->
-<!--            style="font-size: 16px"-->
-<!--            @click="$router.push({name: 'SortTrash'})">开始练习</el-tag>-->
           <el-tag
             type="danger"
             size="medium"

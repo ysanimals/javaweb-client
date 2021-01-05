@@ -10,14 +10,6 @@
                 v-model="num"></el-input>
             </el-form-item>
           </el-col>
-          <!--          <el-col :span="12">-->
-          <!--            <el-form-item>-->
-          <!--              <el-button type="primary" @click="handleSubmit">提交</el-button>-->
-          <!--              <el-button-->
-          <!--                :disabled="loading"-->
-          <!--                @click="resetData">重置题目</el-button>-->
-          <!--            </el-form-item>-->
-          <!--          </el-col>-->
         </el-row>
       </el-form>
       <div>
@@ -59,18 +51,20 @@
             label="我的答案"
             width="180">
             <template slot-scope="scope">
-              <el-select
+              <el-radio-group
                 :disabled="uploaded"
                 @change="onChange(scope)"
                 v-model="scope.row.answerId"
-                placeholder="请选择">
-                <el-option
+              >
+                <el-radio
+                  v-model="radio"
                   v-for="item in options"
                   :key="item.value"
-                  :label="item.label"
+                  :label="item.value"
                   :value="item.value">
-                </el-option>
-              </el-select>
+                  {{item.Text}}
+                </el-radio>
+              </el-radio-group>
             </template>
           </el-table-column>
           <el-table-column
@@ -166,6 +160,7 @@
     components: {DownloadFile},
     data () {
       return {
+        radio:0,
         styleMap: [
           {
             style: ''
@@ -203,20 +198,20 @@
         ],
         options: [
           {
-            value: 1,
-            label: '可回收垃圾'
+            value:  1,
+            Text: '可回收垃圾'
           },
           {
             value: 2,
-            label: '有害垃圾'
+            Text: '有害垃圾'
           },
           {
             value: 3,
-            label: '厨余垃圾'
+            Text: '厨余垃圾'
           },
           {
             value: 4,
-            label: '其他垃圾'
+            Text: '其他垃圾'
           }
         ],
         examSn: '',
@@ -322,6 +317,8 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          console.log(this.tableData)
+
           request.postNoJSON({url: '/api/exam/addList', data: this.tableData}).then(res => {
             if (res.message === 'error') {
               that.$message({

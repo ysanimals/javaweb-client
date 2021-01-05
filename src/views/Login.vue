@@ -149,6 +149,7 @@ export default {
       this.loading = true
       const that = this
       request.get({url: 'api/code/getImgCode'}).then(res => {//获取图片验证码
+        console.log(res)
         that.imgInfo.src = res.data
         that.imgInfo.imgCodeKey = res.imgCodeKey
         that.loading = false
@@ -177,14 +178,16 @@ export default {
       }
       const that = this
       this.clickType = false
+
       request.post({url: '/api/code/checkImgCode', data: imgData}).then(res => {
         if (res.message === 'yes') {
           request.post({url: '/api/user/login', data: formData}).then(res => {
             that.clickType = true
+            console.log(res)
             if (res.message === 'success') {
               localStorage.setItem('access-token', res.result.token)
               localStorage.setItem('roleId', res.result.roleId)
-              localStorage.setItem('roles', JSON.stringify(res.result.roles))
+              localStorage.setItem('roles', JSON.stringify(res.result.roles))//将后端返回的roles放在前端localstorage之中
               this.$message({
                 type: 'success',
                 showClose: true,
