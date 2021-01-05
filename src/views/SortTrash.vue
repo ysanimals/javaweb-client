@@ -1,6 +1,7 @@
 <template>
   <div class="body">
     <div class="center">
+      <h1>垃圾分类练习界面</h1>
       <div class="table" style="width: 800px;">
         <div class="table_row" style="width: 600px;">
           <div class="table_block" v-for="(bin, i) in bins" v-bind:key="i">
@@ -277,6 +278,7 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin-bottom: 20px;
   margin-top: 8px;
 }
 

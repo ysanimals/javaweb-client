@@ -40,7 +40,7 @@
                 @click="fetchData"
                 icon="el-icon-search">查询</el-button>
               <el-button @click="queryParam={}"
-                         icon="el-icon-search">重置</el-button>
+                         icon="el-icon-refresh">重置</el-button>
             </el-form-item>
           </el-col>
         </el-row>

@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <div class="titiled" mar>
-      <h3 align="center" >垃圾分类小游戏登录系统</h3>
+    <div  class="clearfix" style="color: #a0cfff">
+      <div class="logo" align="center" style="color: #a0cfff">
+        <div>
+<!--          <img src="../img/first.png" alt="垃圾分类网，欢迎登录">-->
+        </div>
+      </div>
     </div>
     <div class="center">
       <div class="header"></div>
@@ -240,7 +244,10 @@ h2 {
   align-items: center;
   justify-content: center;
 }
+.logo{
 
+  align: center;
+}
 .header {
   width: 100%;
   height: 40px;
