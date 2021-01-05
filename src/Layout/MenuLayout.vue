@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header class = "elheader">
       <div class="header">
         <div style="margin-top: 16px;">
           <div class="theme">
@@ -15,6 +15,9 @@
                    :default-active="$route.path"
                    class="el-menu-demo"
                    mode="horizontal"
+                   background-color="beige"
+                   text-color="black"
+                   active-text-color="#ffd04b"
                    router>
             <el-menu-item
               v-for="menu in menuList"
@@ -121,6 +124,9 @@
 </script>
 
 <style scoped>
+  .elheader{
+    background-image: url("../img/back1.jpg");
+  }
   .header {
     width: 100%;
     height: 60px;

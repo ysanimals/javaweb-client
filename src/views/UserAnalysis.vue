@@ -47,8 +47,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item>
-              <el-button type="primary" @click="fetchData">查询</el-button>
-              <el-button @click="clearAll">重置</el-button>
+              <el-button type="primary" @click="fetchData"
+                         icon="el-icon-search">查询</el-button>
+              <el-button @click="clearAll"
+                         icon="el-icon-search">重置</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -58,6 +60,9 @@
           ref="multipleTable"
           :data="tableData"
           v-loading="loading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange">

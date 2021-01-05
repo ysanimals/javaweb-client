@@ -37,8 +37,10 @@
         <el-row>
           <el-col :span="8">
             <el-form-item>
-              <el-button type="primary" @click="fetchData">查询</el-button>
-              <el-button @click="queryParam={}">重置</el-button>
+              <el-button type="primary" @click="fetchData"
+                         icon="el-icon-search">查询</el-button>
+              <el-button @click="queryParam={}"
+                         icon="el-icon-refresh">重置</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -55,6 +57,9 @@
           ref="multipleTable"
           :data="tableData"
           v-loading="loading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange">
@@ -92,10 +97,10 @@
             width="240">
             <template slot-scope="scope">
 <!--              mini修改了图标的大小 使其能够排列在一起-->
-              <el-button
+              <el-button  icon="el-icon-picture-outline"
                 size="mini"
                 type="primary"
-                @click="handleUpdate(scope.$index, scope.row)">上传图片
+                @click="handleUpdate(scope.$index, scope.row)">
               </el-button>
               <el-button
                 size="mini"
@@ -286,6 +291,7 @@ export default {
 .body {
   width: 100%;
   height: 100%;
+
 }
 
 .center {

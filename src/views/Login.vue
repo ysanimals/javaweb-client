@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <div class="titiled" mar>
+      <h3 align="center" >垃圾分类小游戏登录系统</h3>
+    </div>
     <div class="center">
       <div class="header"></div>
       <div class="background">
@@ -231,7 +234,7 @@ h2 {
 
 .center {
   width: 100%;
-  height: 100%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -242,7 +245,11 @@ h2 {
   width: 100%;
   height: 40px;
 }
-
+.titiled{
+  margin-bottom: 20px;
+  height: 10%;
+  background-color: lightskyblue;
+}
 .background {
   width: 100%;
   background: lightskyblue;

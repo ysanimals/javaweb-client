@@ -17,6 +17,10 @@
           ref="multipleTable"
           :data="tableData"
           v-loading="loading"
+          element-loading-text="试卷加载中"
+          v-loading.fullscreen.lock=true
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           tooltip-effect="dark"
           style="width: 100%">
           <el-table-column
@@ -36,13 +40,15 @@
           <!--          </el-table-column>-->
           <el-table-column
             prop="imageUrl"
+
             label="查看图片"
             width="120">
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 type="primary"
-                @click="checkImage(scope.$index, scope.row)">查看图片
+                icon="el-icon-picture-outline"
+                @click="checkImage(scope.$index, scope.row)">image
               </el-button>
             </template>
           </el-table-column>
@@ -109,7 +115,8 @@
             <el-form-item>
               <el-button
                 :disabled="loading"
-                @click="resetData">重置题目</el-button>
+                @click="resetData"
+                icon = "el-icon-refresh">重置题目</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -149,6 +156,7 @@
       <download-file ref="downloadFile"></download-file>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -357,6 +365,7 @@
   .body {
     width: 100%;
     height: 100%;
+    background-image: url("../img/photo.jpg");
   }
 
   .center {
@@ -366,5 +375,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  .demo-ruleForm{
+    font-weight: bold;
   }
 </style>

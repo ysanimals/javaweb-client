@@ -1,50 +1,62 @@
 <template>
   <div class="body">
     <div class="center">
-      <el-form ref="form" label-width="80px">
+      <el-form ref="form" label-width="200px">
         <el-row>
-          <el-col :span="10">
+          <el-col :span="12">
+            <el-form-item label=" " >
+<!--              <el-input  v-model="userInfo.userName" disabled></el-input>-->
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+<!--            <el-form-item label="正确率">-->
+<!--              <el-input  v-model="userInfo.accuracy" disabled></el-input>-->
+<!--            </el-form-item>-->
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="用户姓名" >
               <el-input  v-model="userInfo.userName" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="12">
             <el-form-item label="正确率">
               <el-input  v-model="userInfo.accuracy" disabled></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="10">
+          <el-col :span="12">
             <el-form-item label="用户权限" >
               <el-input  v-model="userInfo.roleName" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="12">
             <el-form-item label="答题总数" >
               <el-input  v-model="userInfo.total" disabled></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="10">
+          <el-col :span="12">
             <el-form-item label="手机号码">
               <el-input  v-model="userInfo.phone" disabled></el-input>
             </el-form-item>
           </el-col>
-            <el-col :span="10">
+            <el-col :span="12">
             <el-form-item label="答对题数">
               <el-input v-model="userInfo.right" disabled></el-input>
             </el-form-item>
             </el-col>
           </el-row>
         <el-row>
-          <el-col :span="10">
+          <el-col :span="12">
             <el-form-item label="身份证号" >
               <el-input  v-model="userInfo.idNumber" disabled></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="12">
             <el-form-item label="答错题数" >
               <el-input  v-model="userInfo.wrong" disabled></el-input>
             </el-form-item>
@@ -54,6 +66,7 @@
         <!--          <el-input style="margin-left: 16px" v-model="userInfo.noAnswer" disabled></el-input>-->
         <!--        </el-form-item>-->
       </el-form>
+
     </div>
   </div>
 </template>
@@ -107,11 +120,16 @@
   .body {
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url("../img/back1.jpg");
   }
 
   .center {
-    height: 100%;
+    height: 800px;
     width: 100%;
+    margin:auto;
     display: flex;
     flex-direction: column;
     align-items: center;
