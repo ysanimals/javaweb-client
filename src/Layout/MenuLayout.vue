@@ -5,7 +5,7 @@
         <div style="margin-top: 16px;">
           <div class="theme">
             <el-page-header
-              @back="goBack" content="垃圾分类小游戏管理系统">
+              @back="goBack" content="垃圾分类管理系统">
             </el-page-header>
           </div>
         </div>
