@@ -9,32 +9,8 @@
             </el-page-header>
           </div>
         </div>
-        <div class="menu">
-          <el-menu style="border: none"
-                   @select="handleSelect"
-                   :default-active="$route.path"
-                   class="el-menu-demo"
-                   mode="horizontal"
-                   background-color="beige"
-                   text-color="black"
-                   active-text-color="#ffd04b"
-                   router>
-            <el-menu-item
-              v-for="menu in menuList"
-              v-bind:key="menu.menuId"
-              :index="nameMap[menu.menuSort]">{{ menu.menuName }}</el-menu-item>
-            <el-submenu
-              v-for="menu in menuList2"
-              v-bind:key="menu.menuId"
-              :index="nameMap[menu.menuSort]">
-              <template slot="title">{{ menu.menuName }}</template>
-              <el-menu-item
-                v-for="subMenu in menu.children"
-                v-bind:key="subMenu.menuSort"
-                :index="subNameMap[subMenu.menuSort]">{{ subMenu.menuName }}</el-menu-item>
-            </el-submenu>
-          </el-menu>
-        </div>
+
+
         <div class="menu_right">
           <el-tag
             type="danger"
@@ -44,9 +20,38 @@
         </div>
       </div>
     </el-header>
+    <el-container>
+      <el-aside width="150px" style="background-color: rgb(238, 241, 246)">
+        <el-menu style="border: none"
+                 @select="handleSelect"
+                 :default-active="$route.path"
+                 class="el-menu-demo"
+                 mode="horizontal"
+                 background-color="beige"
+                 text-color="black"
+                 active-text-color="#ffd04b"
+                 router>
+          <el-menu-item
+            v-for="menu in menuList"
+            v-bind:key="menu.menuId"
+            :index="nameMap[menu.menuSort]">{{ menu.menuName }}</el-menu-item>
+          <el-submenu
+            v-for="menu in menuList2"
+            v-bind:key="menu.menuId"
+            :index="nameMap[menu.menuSort]">
+            <template slot="title">{{ menu.menuName }}</template>
+            <el-menu-item
+              v-for="subMenu in menu.children"
+              v-bind:key="subMenu.menuSort"
+              :index="subNameMap[subMenu.menuSort]">{{ subMenu.menuName }}</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
+
     <el-main>
       <router-view/>
     </el-main>
+    </el-container>
   </el-container>
 </template>
 
