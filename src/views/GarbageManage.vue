@@ -30,26 +30,19 @@
                 type="text"
                 v-model="queryParam.garbageName"
                 @keyup.enter.native="fetchData"></el-input>
-
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
+          <el-col :span="2" class="center">
             <el-form-item>
               <el-button type="primary" @click="fetchData"
                          icon="el-icon-search">查询</el-button>
               <el-button @click="queryParam={}"
                          icon="el-icon-refresh">重置</el-button>
+              <el-button type="primary" @click="addGarbage">新增</el-button>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item>
-            <el-col :span="8">
-              <el-button type="primary" @click="addGarbage">新增</el-button>
-            </el-col>
-          </el-form-item>
         </el-row>
       </el-form>
       <div>
@@ -291,6 +284,7 @@ export default {
 .body {
   width: 100%;
   height: 100%;
+  background-image: url("../img/s1.jpg");
 
 }
 
