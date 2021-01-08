@@ -118,7 +118,7 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
+        }).then(() => {//退出的时候把token从localStorage中移除
           localStorage.removeItem('access-token')
           window.location.href = '/'
         }).catch(() => {

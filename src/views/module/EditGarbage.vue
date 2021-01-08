@@ -36,6 +36,22 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="垃圾图片"  v-model="garbage.file" prop="imageUrl">
+            <el-upload
+              class="upload-demo"
+              ref="upload"
+              action="#"
+              :limit="1"
+              :http-request="handleUpdate"
+              :on-change="handleChange"
+              :on-remove="handleRemove"
+              :multiple="false"
+              :on-exceed="handleExceed"
+              :file-list="fileList">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -78,13 +94,27 @@ export default {
     show (record) {
       let obj = JSON.stringify(record)
       this.garbage = JSON.parse(obj)
+      // this.garbage = record
       this.visible = true
+    },
+    handleUpdate(obj) {
+      console.log(obj.file)
+      this.garbage.file = obj.file
     },
     handleSubmit () {
       const that = this
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          request.postNoJSON({url: '/api/garbage/update', data: that.garbage}).then(res => {
+          let formData = new FormData
+          formData.append('file', that.garbage.file)
+          formData.append('garbageId',that.garbage.garbageId)
+          if (this.garbage.garbageFlag == null) {
+            this.garbage.garbageFlag = ''
+          }
+          formData.append('garbageFlag', that.garbage.garbageFlag)
+          formData.append('garbageName', that.garbage.garbageName)
+          formData.append('sortId', that.garbage.sortId)
+          request.postFile( '/api/garbage/update', formData).then(res => {
             if (res.result === 'error') {
               this.$message({
                 type: 'error',
@@ -109,6 +139,24 @@ export default {
           return false
         }
       })
+    },
+    handleChange (file, fileList) {
+      console.log(1)
+      this.fileList = fileList
+      console.log(fileList)
+    },
+    handleRemove(file) {
+      console.log(2)
+      this.garbage.file = null
+      this.garbage.fileList = []
+    },
+    handleExceed(file,fileList){
+      console.log(file)
+      this.fileList = fileList
+    },
+
+    handleDownload(file) {
+      console.log(file);
     }
   }
 }
