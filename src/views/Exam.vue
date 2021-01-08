@@ -295,7 +295,7 @@
         })
       },
       onChange (scope) {
-        // console.log(scope.row)
+        console.log(scope.row)
       },
       clearData () {
         this.dataInfo = {

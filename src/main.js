@@ -32,7 +32,6 @@ function checkPermission (p, t) {
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   const roles = JSON.parse(localStorage.getItem('roles'))
-  console.log(roles)
   if (to.name !== 'Login' && to.name !== 'Register' && to.name !== 'SortTrash' && to.path.indexOf('/file') === -1) {
     flag = false
     for (let role of roles) {

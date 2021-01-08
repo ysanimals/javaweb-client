@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 function requestPost (url, method, data) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {//Promise 对象用于表示一个异步操作的最终完成
     Vue.http.post(url, data, {
       // baseURL: 'https://tomb.xuebaeasy.com/',
       method: method,

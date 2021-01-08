@@ -21,12 +21,12 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="150px" style="background-color: rgb(238, 241, 246)">
+      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
         <el-menu style="border: none"
+                 align="center"
                  @select="handleSelect"
                  :default-active="$route.path"
-                 class="el-menu-demo"
-                 mode="horizontal"
+                 class="el-menu-vertical-demo"
                  background-color="beige"
                  text-color="black"
                  active-text-color="#ffd04b"
@@ -129,6 +129,11 @@
 </script>
 
 <style scoped>
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
+
   .elheader{
     background-image: url("../img/back1.jpg");
   }
@@ -147,8 +152,7 @@
   }
 
   .menu {
-    width: 100%;
-    margin-left: 32px;
+    width: 80%;
     display: flex;
     flex-direction: row;
     align-content: center;

@@ -194,7 +194,7 @@ export default {
             if (res.message === 'success') {
               localStorage.setItem('access-token', res.result.token)
               localStorage.setItem('roleId', res.result.roleId)
-              localStorage.setItem('roles', JSON.stringify(res.result.roles))//将后端返回的roles放在前端localstorage之中
+              localStorage.setItem('roles', JSON.stringify(res.result.roles))//也就是后端返回给前端的菜单 每个用户roleId 不同 对应的roles也不同
               this.$message({
                 type: 'success',
                 showClose: true,
